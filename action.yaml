@@ -1,0 +1,172 @@
+name: "Magento 2 DDEV installation"
+author: "Julien Loizelet"
+description: " A Github Action that install a Magento 2 instance with ddev"
+
+inputs:
+
+  php_version:
+    type: string
+    required: true
+    default: "8.1"
+    description: "PHP Version to use"
+
+  magento_edition:
+    type: string
+    default: "magento/project-community-edition"
+    description: "The edition of Magento to install"
+
+  magento_version:
+    type: string
+    required: true
+    default: "2.4.5"
+    description: "The Magento release version to install"
+
+  magento_repository:
+    type: string
+    required: true
+    default: "https://mirror.mage-os.org/"
+    description: "Where to install Magento from"
+
+  composer_auth:
+    type: string
+    required: false
+    description: "Composer Authentication Credentials"
+    default: ""
+
+  varnish_setup:
+    type: boolean
+    required: false
+    description: "Install with ready-to-use Varnish"
+    default: false
+
+runs:
+  using: "composite"
+  steps:
+    - name: Clone DDEV Magento 2 specific files
+      uses: actions/checkout@v3
+      with:
+        path: .ddev
+        repository: julienloizelet/ddev-m2
+        ref: "v2.3.0"
+
+    - name: Install DDEV
+      # @see https://ddev.readthedocs.io/en/stable/#installationupgrade-script-linux-and-macos-armarm64-and-amd64-architectures
+      env:
+        DDEV_VERSION: v1.21.1
+      shell: bash
+      run: |
+        
+        sudo apt-get -qq update
+        sudo apt-get -qq -y install libnss3-tools
+        curl -LO https://raw.githubusercontent.com/drud/ddev/master/scripts/install_ddev.sh
+        bash install_ddev.sh ${{env.DDEV_VERSION}}
+        ddev config global --instrumentation-opt-in=false --omit-containers=dba,ddev-ssh-agent
+        rm install_ddev.sh
+
+    - name: Set M2_VERSION_CODE env
+      # used in some directory path and conventional file naming (Example : 2.4.3 => m243)
+      shell: bash
+      run: |
+        echo "M2_VERSION_CODE=$(echo m${{ inputs.magento_version }} | sed 's/\.//g' )" >> $GITHUB_ENV
+
+    - name: Set COMPOSER_AUTH
+      shell: bash
+      if: ${{inputs.composer_auth}}
+      run: |
+        mkdir -p .ddev/homeadditions/.composer
+        echo '${{ inputs.composer_auth }}' > .ddev/homeadditions/.composer/auth.json
+
+    - name: Set ELASTIC_INSTALL_STRING env for 2.4
+      shell: bash
+      if: startsWith(inputs.magento_version, '2.4')
+      run: echo "ELASTIC_INSTALL_STRING='--elasticsearch-host=elasticsearch'" >> $GITHUB_ENV
+
+    - name: Set ELASTIC_INSTALL_STRING env for 2.3
+      shell: bash
+      if: startsWith(inputs.magento_version, '2.3')
+      run: echo "ELASTIC_INSTALL_STRING=" >> $GITHUB_ENV
+
+    - name: Prepare DDEV
+      shell: bash
+      run: |
+        cp .ddev/config_overrides/config.${{ env.M2_VERSION_CODE }}.yaml .ddev/config.${{ env.M2_VERSION_CODE }}.yaml
+        sed -i -e 's/^php_version:.*/php_version: ${{ inputs.php_version }}/g' .ddev/config.${{ env.M2_VERSION_CODE }}.yaml
+
+    - name: Prepare Varnish
+      shell: bash
+      if: inputs.varnish_setup == 'true'
+      run: |
+        cp .ddev/custom_files/varnish-profile.xml varnish-profile.xml
+        cp .ddev/custom_files/default.vcl .ddev/varnish/default.vcl
+        cp .ddev/additional_docker_compose/docker-compose.varnish.yaml .ddev/docker-compose.varnish.yaml
+
+    - name: Start DDEV for ${{ inputs.magento_version }} with PHP ${{ inputs.php_version }}
+      shell: bash
+      run: ddev start
+
+    - name: Handle Varnish VCL
+      shell: bash
+      if: inputs.varnish_setup == 'true'
+      run: |
+        ddev replace-acl $(ddev find-ip ddev-router)
+        ddev reload-vcl  
+
+    - name: Set COMPOSER_VERSION env
+      shell: bash
+      run: echo "COMPOSER_VERSION=$(ddev exec composer -V | grep -oP "([0-9]{1,}\.)([0-9]{1,}\.)([0-9]{1,})(-(alpha|beta)\.[0-9]{1,})?" )" >> $GITHUB_ENV
+
+    - name: Create Magento ${{ inputs.magento_edition }} ${{ inputs.magento_version }} project
+      shell: bash
+      # We don't use "ddev composer create" as it restarts all containers
+      run: |
+        ddev exec composer create --repository="${{ inputs.magento_repository }}" "${{ inputs.magento_edition }}" ${{ env.M2_VERSION_CODE }} ${{ inputs.magento_version }} --no-install
+        cp -r ${{ env.M2_VERSION_CODE }}/. ${{ github.workspace }}
+        rm -rf ${{ env.M2_VERSION_CODE }}
+
+    - name: Fixup Composer Plugins
+      shell: bash
+      if: ${{ startsWith(env.COMPOSER_VERSION, '2') }}
+      run: |
+        ddev composer config --no-interaction allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+        ddev composer config --no-interaction allow-plugins.laminas/laminas-dependency-plugin true
+        ddev composer config --no-interaction allow-plugins.magento/* true
+
+    - name: Fixup Monolog
+      # @see https://github.com/magento/magento2/pull/35596
+      shell: bash
+      if: contains(fromJson('["2.4.4"]'),inputs.magento_version)
+      run: ddev composer require monolog/monolog:"<2.7.0" --no-update
+
+    - name: Install composer 1 plugin for parallel downloads
+      shell: bash
+      run: ddev composer global require hirak/prestissimo
+      if: ${{ startsWith(env.COMPOSER_VERSION, '1') }}
+
+    - name: Install Magento
+      shell: bash
+      run: ddev exec composer install
+
+    - name: Setup Magento ${{ inputs.magento_edition }} ${{ inputs.magento_version }}
+      shell: bash
+      run: |
+        ddev magento setup:install \
+                         --base-url=https://${{ env.M2_VERSION_CODE }}.ddev.site \
+                         --db-host=db \
+                         --db-name=db \
+                         --db-user=db \
+                         --db-password=db \
+                         --backend-frontname=admin \
+                         --admin-firstname=admin \
+                         --admin-lastname=admin \
+                         --admin-email=admin@admin.com \
+                         --admin-user=admin \
+                         --admin-password=admin123 \
+                         --language=en_US \
+                         --currency=USD \
+                         --timezone=America/Chicago \
+                         --use-rewrites=1 \
+                         ${{ env.ELASTIC_INSTALL_STRING }}
+
+branding:
+  icon: "code"
+  color: "green"
