@@ -4,7 +4,7 @@
 [![Installation with Varnish](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml/badge.svg?event=push)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml)
 [![Installation with Static and Unit tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml/badge.svg?event=push)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml)
 
-A GitHub Action for installing Magento 2 with DDEV
+A GitHub Action for installing Magento 2 with DDEV.
 
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -129,7 +129,7 @@ ddev magento c:c
 
 ### Test a module
 
-Once you have run this actions, you will be able to install and activate a module. Thus, you will be able to run all 
+Once you have run this action, you will be able to install and activate a module. Thus, you will be able to run all 
 kind of tests : static tests (coding standards), unit tests, integration tests, or any other end-to-end tests.
 
 #### Examples
