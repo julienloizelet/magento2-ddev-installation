@@ -6,7 +6,7 @@ inputs:
 
   php_version:
     type: string
-    required: true
+    required: false
     default: "8.1"
     description: "PHP Version to use"
 
@@ -17,20 +17,20 @@ inputs:
 
   magento_version:
     type: string
-    required: true
+    required: false
     default: "2.4.5"
     description: "The Magento release version to install"
 
   magento_repository:
     type: string
-    required: true
+    required: false
     default: "https://mirror.mage-os.org/"
     description: "Where to install Magento from"
 
   composer_auth:
     type: string
     required: false
-    description: "Composer Authentication Credentials"
+    description: "Composer authentication credentials"
     default: ""
 
   varnish_setup:
