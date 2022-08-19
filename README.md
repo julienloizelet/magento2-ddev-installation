@@ -152,7 +152,7 @@ $GITHUB_WORKSPACE
 │
 └───.ddev
 │   │   
-│   │ 
+│   │ (Cloned sources of a Magento 2 DDEV specific repo)
 │   
 └───my-own-modules
     │   
