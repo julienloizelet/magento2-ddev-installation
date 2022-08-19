@@ -1,0 +1,113 @@
+name: End-to-end tests
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  end-to-end-test-suite:
+    strategy:
+      fail-fast: false
+      matrix:
+        # Last 2 patches for the current minor, and last one for the previous minor, greatest php version
+        m2-version: [ "2.3.7", "2.4.4", "2.4.5" ]
+        php-version: [ "7.4", "8.1" ]
+        exclude:
+          - { php-version: "8.1", m2-version: "2.3.7" }
+          - { php-version: "7.4", m2-version: "2.4.4" }
+          - { php-version: "7.4", m2-version: "2.4.5" }
+
+
+    name: End-to-end test suite
+    if: ${{ !contains(github.event.head_commit.message, 'chore(') }}
+    runs-on: ubuntu-latest
+    env:
+      EXTENSION_PACKAGE_NAME: "okaeli/magento2-category-code"
+      EXTENSION_NAME: "Okaeli_CategoryCode"
+      EXTENSION_PATH: "category-code"
+      EXTENSION_GITHUB_URL: "julienloizelet/magento2-category-code"
+      EXTENSION_REF: "v1.1.10"
+
+    steps:
+
+      - name: Install Magento 2 with DDEV
+        uses: ./
+        with:
+          php_version: ${{ matrix.php-version }}
+          magento_version: ${{ matrix.m2-version }}
+          composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}
+          magento_repository: "https://repo.magento.com/"
+
+      - name: Add playwright to DDEV
+        run: |
+          cp .ddev/additional_docker_compose/docker-compose.playwright-alone.yaml .ddev/docker-compose.playwright.yaml
+          cp .ddev/custom_files/varnish-profile.xml varnish-profile.xml
+          ddev restart
+
+      - name: Clone M2 ${{ env.EXTENSION_NAME }} files
+        uses: actions/checkout@v2
+        with:
+          path: my-own-modules/${{ env.EXTENSION_PATH }}
+          repository: ${{ env.EXTENSION_GITHUB_URL }}
+          ref: ${{ env.EXTENSION_REF }}
+
+      - name: Validate composer.json
+        run: ddev composer validate --working-dir ./my-own-modules/${{ env.EXTENSION_PATH }}
+
+      - name: Prepare composer repositories
+        run: |
+          ddev composer config --unset repositories.0
+          ddev composer config repositories.0 '{"type": "path", "url":"my-own-modules/${{ env.EXTENSION_PATH }}/",  "canonical": true}'
+          ddev composer config repositories.1 '{"type": "composer", "url":"${{ matrix.magento-repository }}",  "exclude": ["${{ env.EXTENSION_PACKAGE_NAME }}"]}'
+
+      - name: Add ${{ env.EXTENSION_NAME }} as composer dependency
+        run: |
+          ddev composer require ${{ env.EXTENSION_PACKAGE_NAME }}:@dev --no-interaction
+
+      - name: Disable some extensions for 2.4
+        if: startsWith(matrix.m2-version, '2.4')
+        run: |
+          ddev magento module:disable Magento_TwoFactorAuth
+          ddev magento module:disable Magento_AdminNotification
+
+      - name: Make some workaround for some M2 versions
+        if: contains(fromJson('["2.3.7"]'),matrix.m2-version)
+        run: |
+          ddev magento  module:disable Dotdigitalgroup_Chat
+          ddev magento  module:disable Dotdigitalgroup_Email
+
+      - name: Enable extension
+        run: |
+          ddev magento deploy:mode:set developer
+          ddev magento module:enable ${{ env.EXTENSION_NAME }}
+          ddev magento setup:upgrade
+          ddev magento setup:static-content:deploy -f
+          ddev magento cache:flush
+
+      - name: Prepare for playwright test
+        run: |
+          ddev magento setup:performance:generate-fixtures ./varnish-profile.xml
+          cd ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}
+          mkdir -p view/frontend/layout
+          cp Test/EndToEnd/layout-update-test-file/catalog_category_code_test_code_1.xml.dist view/frontend/layout/catalog_category_code_test_code_1.xml
+          ddev magento cache:flush
+          cd ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd/__scripts__
+          chmod +x test-init.sh
+          ./test-init.sh
+          chmod +x run-tests.sh
+
+      - name: Config test
+        run: |
+          cd ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd/__scripts__
+          ./run-tests.sh ci "./__tests__/1-config.js"
+
+      - name: Update layout handle test
+        run: |
+          cd ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd/__scripts__
+          ./run-tests.sh ci "./__tests__/2-handle-update.js"

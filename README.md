@@ -3,6 +3,7 @@
 [![Version](https://img.shields.io/github/v/release/julienloizelet/github-actions-magento2-ddev-installation)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/releases)
 [![Installation with Varnish](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml/badge.svg?event=push)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml)
 [![Installation with Static and Unit tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml/badge.svg?event=push)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml)
+[![End-to-end tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml/badge.svg?event=push)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml)
 
 A GitHub Action for installing Magento 2 with DDEV.
 
@@ -137,6 +138,7 @@ kind of tests : static tests (coding standards), unit tests, integration tests, 
 Before reading below, you could read the examples here: 
 - [Static and Unit test of a module](.github/workflows/module-with-static-and-unit-tests.yml)
 - [Installation and Varnish test of a module](.github/workflows/module-with-varnish-test.yml)
+- [End-to-end tests of a module](.github/workflows/module-with-end-to-end-tests.yml)
 
 
 #### How to
