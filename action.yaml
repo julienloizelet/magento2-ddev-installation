@@ -1,6 +1,6 @@
 name: "Magento 2 installation with DDEV"
 author: "Julien Loizelet"
-description: " A Github Action that install a Magento 2 instance with ddev"
+description: " A Github Action for installing Magento 2 with DDEV"
 
 inputs:
 
@@ -12,6 +12,7 @@ inputs:
 
   magento_edition:
     type: string
+    required: false
     default: "magento/project-community-edition"
     description: "The edition of Magento to install"
 
