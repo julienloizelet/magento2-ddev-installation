@@ -1,9 +1,9 @@
 # Magento 2 installation with DDEV
 
 [![Version](https://img.shields.io/github/v/release/julienloizelet/github-actions-magento2-ddev-installation)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/releases)
-[![Installation with Varnish](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml/badge.svg?event=push)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml)
-[![Installation with Static and Unit tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml/badge.svg?event=push)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml)
-[![End-to-end tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml/badge.svg?event=push)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml)
+[![Installation with Varnish](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml)
+[![Installation with Static and Unit tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml)
+[![End-to-end tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml)
 
 A GitHub Action for installing Magento 2 with DDEV.
 
