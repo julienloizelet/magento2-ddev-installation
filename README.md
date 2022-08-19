@@ -9,6 +9,16 @@ A GitHub Action for installing Magento 2 with DDEV
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Quick start](#quick-start)
+- [Settings](#settings)
+- [Usage](#usage)
+  - [Use DDEV to interact with your Magento 2 instance](#use-ddev-to-interact-with-your-magento-2-instance)
+  - [Test a module](#test-a-module)
+    - [Examples](#examples)
+    - [How to](#how-to)
+- [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
