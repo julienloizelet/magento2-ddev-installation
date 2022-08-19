@@ -63,10 +63,10 @@ runs:
         rm install_ddev.sh
 
     - name: Set M2_VERSION_CODE env
-      # used in some directory path and conventional file naming (Example : 2.4.3 => m243)
+      # used in some directory path and conventional file naming (Example : 2.4.3 => m243; 2.3.7-p4 => m237)
       shell: bash
       run: |
-        echo "M2_VERSION_CODE=$(echo m${{ inputs.magento_version }} | sed 's/\.//g' )" >> $GITHUB_ENV
+        echo "M2_VERSION_CODE=$(echo m${{ inputs.magento_version }} | grep  -oP "^m([0-9]{1,}\.)([0-9]{1,}\.)([0-9]{1,})(-(p)\.[0-9]{1,})?" | sed 's/\.//g' )" >> $GITHUB_ENV
 
     - name: Set COMPOSER_AUTH
       shell: bash

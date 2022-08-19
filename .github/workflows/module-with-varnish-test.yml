@@ -16,11 +16,11 @@ jobs:
       fail-fast: false
       matrix:
         # Last one for the current and previous minor, greatest php version
-        m2-version: [ "2.3.7", "2.4.5" ]
+        m2-version: [ "2.3.7-p4", "2.4.5" ]
         php-version: [ "7.4", "8.1" ]
         magento-repository: [ "https://repo.magento.com/", "https://mirror.mage-os.org/" ]
         exclude:
-          - { php-version: "8.1", m2-version: "2.3.7" }
+          - { php-version: "8.1", m2-version: "2.3.7-p4" }
           - { php-version: "7.4", m2-version: "2.4.5" }
 
     name: Installation and Varnish test suite
@@ -48,7 +48,7 @@ jobs:
           magento_repository: ${{ matrix.magento-repository }}
           varnish_setup: "true"
 
-      - name: Clone M2 ${{ env.EXTENSION_NAME }} files
+      - name: Clone ${{ env.EXTENSION_NAME }} module files
         uses: actions/checkout@v3
         with:
           path: my-own-modules/${{ env.EXTENSION_PATH }}
@@ -65,7 +65,10 @@ jobs:
         run: ddev composer require ${{ env.EXTENSION_PACKAGE_NAME }}:@dev --no-interaction
 
       - name: Installation tests
+        # chmod 777 to minimize chance to get the following error:
+        # The directory "/var/www/html/generated/code" cannot be deleted Warning!rmdir(/var/www/html/generated/code): Directory not empty
         run: |
+          sudo chmod -R 777 ${{ github.workspace }}
           ddev magento maintenance:enable
           ddev magento module:enable ${{ env.EXTENSION_NAME }}
           ddev magento maintenance:disable
@@ -76,6 +79,7 @@ jobs:
       - name: Disable some extensions for 2.4
         if: startsWith(matrix.m2-version, '2.4')
         run: |
+          sudo chmod -R 777 ${{ github.workspace }}
           ddev magento maintenance:enable
           ddev magento module:disable Magento_TwoFactorAuth
           ddev magento maintenance:disable
