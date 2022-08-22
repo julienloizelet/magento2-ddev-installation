@@ -41,7 +41,7 @@ jobs:
       - name: Clone sources
         uses: actions/checkout@v2
 
-      - name: Check version ${{ env.VERSION_NUMBER }} consistency in CHANGELOG
+      - name: Check version ${{ env.VERSION_NUMBER }} consistency in CHANGELOG and README
         run: |
           CURRENT_DATE=$(date +'%Y-%m-%d')
           CHANGELOG_VERSION=$(grep -o -E "## \[(.*)\] - $CURRENT_DATE"  CHANGELOG.md | head -1 | sed 's/ //g')
@@ -51,6 +51,16 @@ jobs:
           else
           echo "CHANGELOG VERSION KO"
           exit 1
+          fi
+          README_VERSION=$(grep -E "julienloizelet/github-actions-magento2-ddev-installation@v(.*)"  README.md | sed 's/ //g')
+          echo $README_VERSION
+          echo "julienloizelet/github-actions-magento2-ddev-installation@v${{ env.VERSION_NUMBER }}"
+          if [[ $README_VERSION == "julienloizelet/github-actions-magento2-ddev-installation@v${{ env.VERSION_NUMBER }}" ]]
+          then
+              echo "Version in README.md: OK"
+          else
+              echo "Version in README.md: KO"
+              exit 1
           fi
 
       - name: Create Tag ${{ github.event.inputs.tag_name }}

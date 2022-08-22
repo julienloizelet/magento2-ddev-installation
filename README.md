@@ -5,7 +5,7 @@
 [![Installation with Static and Unit tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml)
 [![End-to-end tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml)
 
-A GitHub Action for installing Magento 2 with DDEV.
+A GitHub Action for installing Magento 2 with [DDEV](https://github.com/drud/ddev).
 
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -30,7 +30,7 @@ _We will suppose here that you want to test on a Magento 2.4.5 instance with PHP
 You can add the following step in your workflow:
 
 ```yaml
-- uses: julienloizelet/github-actions-magento2-ddev-installation@main
+- uses: julienloizelet/github-actions-magento2-ddev-installation@v1.0.0
   with:
     php_version: "8.1"
     magento_version: "2.4.5"
@@ -38,77 +38,94 @@ You can add the following step in your workflow:
 
 This step will install a Magento `2.4.5` instance with PHP `8.1`.
 
-For you information, the setup of Magento 2 is launch with the following settings: 
+In the steps that follow, you will be able to run any DDEV commands to interact with the Magento 2 environment.
 
-```shell
-bin/magento setup:install \
-   --base-url=https://m245.ddev.site \
-   --db-host=db \
-   --db-name=db \
-   --db-user=db \
-   --db-password=db \
-   --backend-frontname=admin \
-   --admin-firstname=admin \
-   --admin-lastname=admin \
-   --admin-email=admin@admin.com \
-   --admin-user=admin \
-   --admin-password=admin123 \
-   --language=en_US \
-   --currency=USD \
-   --timezone=America/Chicago \
-   --use-rewrites=1 \
-   --elasticsearch-host=elasticsearch
-```
-
-
-The Magento 2 environment is a Docker environment created  with [DDEV](https://github.com/drud/ddev) and comes with the 
-following 
-services:
-- `web`: PHP `8.1`, nginx-fpm, NodeJs
-- `db`: MariaDb
-- `elastisearch`
-- `memcached`
-- `redis`
-- `mailhog`
-
-Inside your workflow, you could access to the website at the url `https://m245.ddev.site`.
-
-
-
-
-Furthermore, as we are using here the default values: 
-- Sources come from the [Mage-OS](https://mage-os.org/) composer repository.
-- Magento edition is Magento Open Source (CE) (`magento/project-community-edition`).
-- Varnish is not used
-- There is no `COMPOSER_AUTH` required.
-
-Finally, the structure of your `$GITHUB_WORKSPACE` will look like below.
-
-
-```markdown
-$GITHUB_WORKSPACE
-│   
-│ (Magento 2 sources installed with composer)    
-│
-└───.ddev
-    │   
-    │ (Cloned sources of `julienloizelet/ddev-m2` repo : a Magento 2 DDEV specific repo)
-```
 
 ## Settings
 
-The following are optional as `step.with` keys:
+
+### Available keys
+
+The following keys are available as `step.with` keys:
+
+---
+- `php_version`(_String_): PHP version to use in the web container. Default: `8.1`.
+
+Allowed values are: `7.2`, `7.3`, `7.4`, `8.1`.
+
+Please choose a PHP version that is compatible with the `magento_version` below.
+
+---
+- `magento_repository`(_String_): Where to install Magento from. Default: `https://mirror.mage-os.org/`.
+
+Could be "https://mirror.mage-os.org/", "https://repo.magento.com/" or any available fork.
+
+Please choose a repository that handle the `magento_version` below.
+
+---
+- `magento_edition`(_String_):  The edition of Magento to install. Default: `magento/project-community-edition`
+
+Could be "magento/project-community-edition", "magento/project-enterprise-edition" or any available edition.
+
+---
+- `magento_version`(_String_): The Magento release version to install.  Default: `2.4.5`.
+
+You can use `X.Y.Z` format or `X.Y.Z-pN` format for patch release.
+
+Allowed versions are `2.3.0`, `2.3.1`, `2.3.2`, `2.3.3`, `2.3.4`, `2.3.5`, `2.3.6`, `2.3.7`, `2.4.0`,
+  `2.4.1`, `2.4.2`, `2.4.3`,`2.4.4`, `2.4.5` and any of their patches versions. 
+
+Please note that available versions depend on the chosen `magento_repository`.
+
+---
+- `composer_auth`(_String_): Composer authentication credentials. Default: `""`.
 
 
-|         Name         	|   Type  	|               Description              	|               Default               	|                                                                                                        Comments                                                                                                                                                                                                                 	                                                                                                         |
-|:--------------------:	|:-------:	|:--------------------------------------:	|:-----------------------------------:	|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-|     `php_version`    	| String  	|           PHP Version to use           	|                "8.1"                	|                                                                                                                                                                                                                     	                                                                                                                                                                                                                     |
-| `magento_repository` 	| String  	|      Where to install Magento from     	|    "https://mirror.mage-os.org/"    	|                                                                                              For Adobe repository: "https://repo.magento.com/"                                                                                                                                                                                            	                                                                                               |
-|   `magento_edition`  	|  String 	|    The edition of Magento to install   	| "magento/project-community-edition" 	|                                                                                            For Adobe Commerce: "magento/project-enterprise-edition"                                                                                                                                                                                         	                                                                                             |
-|   `magento_version`  	|  String 	| The Magento release version to install 	|               "2.4.5"               	|                                                      Available versions depend on the chosen `magento_repository`.<br>You can use `X.Y.Z` format or `X.Y.Z-pN` for patch release.<br>The DDEV repo handle only versions from `2.3.0` to `2.4.5` (latest release for now)                                                                                                           	                                                      |
-|    `composer_auth`   	|  String 	|   Composer authentication credentials  	|                  ""                 	|                       You have to pass a JSON string. For example:<br>```{    "http-basic": {       "repo.magento.com": {           "username": "**********************",            "password": "*****************"        }    }}```<br><br>As GitHub allows saving multiline secret, you can use a secret to store this sensitive value. For example:<br>```composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}``` 	                        |
-|    `varnish_setup`   	| Boolean 	|    Install with ready-to-use Varnish   	|                false                	|You should use quote to set true:  `varnish_setup: "true"`<br><br>For more information, please see [related documentation](https://github.com/julienloizelet/ddev-m2#varnish)                                                                                                                                                                                                                                                            	 |
+You have to pass a JSON string. For example:
+```json
+{qq
+  "http-basic": {
+    "repo.magento.com": {
+      "username": "**********************",
+      "password": "**********************"
+    }
+  }
+}
+```
+As GitHub allows saving multiline secret, you can use a secret to store this sensitive value. Just copy/paste the 
+json in a `M2_COMPOSER_AUTH` secret and use it like this: `composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}`.
 
+---
+
+- `varnish_setup`(_Boolean_): Install with ready-to-use Varnish. Default: `false`.
+  You should use quote to set true:  `varnish_setup: "true"`.
+
+---
+
+
+### Examples
+
+- Magento `2.3.7-p4` (`magento/project-community-edition`) , from `https://repo.magento.com/`, with PHP 7.4 and 
+  without Varnish:
+
+```
+with:
+  php_version: "7.4"
+  magento_version: "2.3.7-p4"
+  magento_repository: "https://repo.magento.com/"
+  composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}
+```
+
+- Magento `2.4.4` (`magento/project-community-edition`) , from `https://mirror.mage-os.org/`, with PHP 8.1 and
+  with Varnish:
+
+
+```
+with:
+  php_version: "8.1"
+  magento_version: "2.4.4"
+  varnish_setup: "true"
+```
 
 
 ## Usage
@@ -201,6 +218,61 @@ Then, you could run:
 - PHP Mess Detector: `ddev phpmd my-own-modules/<some-path>`
 - PHP Stan: `ddev phpstan my-own-modules/<some-path>`
 - Unit test: `ddev phpunit my-own-modules/<some-path>/Test/Unit`
+
+
+
+## Technical details
+
+For you information, the setup of Magento 2 is launch with the following settings:
+
+```shell
+bin/magento setup:install \
+   --base-url=https://m245.ddev.site \
+   --db-host=db \
+   --db-name=db \
+   --db-user=db \
+   --db-password=db \
+   --backend-frontname=admin \
+   --admin-firstname=admin \
+   --admin-lastname=admin \
+   --admin-email=admin@admin.com \
+   --admin-user=admin \
+   --admin-password=admin123 \
+   --language=en_US \
+   --currency=USD \
+   --timezone=America/Chicago \
+   --use-rewrites=1 \
+   --elasticsearch-host=elasticsearch
+```
+
+
+The Magento 2 environment is a Docker environment created  with DDEV and comes with the
+following
+services:
+- `web`: PHP `8.1`, nginx-fpm, NodeJs
+- `db`: MariaDb
+- `elastisearch`
+- `memcached`
+- `redis`
+- `mailhog`
+
+
+Finally, the structure of your `$GITHUB_WORKSPACE` will look like below.
+
+
+```markdown
+$GITHUB_WORKSPACE
+│   
+│ (Magento 2 sources installed with composer)    
+│
+└───.ddev
+    │   
+    │ (Cloned sources of a Magento 2 DDEV specific repo)
+```
+
+The Magento 2 DDEV specific repo is https://github.com/julienloizelet/ddev-m2: it includes some others DDEV custom
+commands and files.
+
 
 
 ## License

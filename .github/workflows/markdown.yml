@@ -34,7 +34,7 @@ jobs:
 
       - uses: technote-space/toc-generator@v4
         with:
-          MAX_HEADER_LEVEL: 5
+          MAX_HEADER_LEVEL: 3
           COMMIT_NAME: Okaeli Dev Bot
           TARGET_PATHS: 'README.md'
           CHECK_ONLY_DEFAULT_BRANCH: true
