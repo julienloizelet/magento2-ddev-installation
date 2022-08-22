@@ -14,11 +14,12 @@ A GitHub Action for installing Magento 2 with [DDEV](https://github.com/drud/dde
 
 - [Quick start](#quick-start)
 - [Settings](#settings)
+  - [Available keys](#available-keys)
+  - [Examples](#examples)
 - [Usage](#usage)
   - [Use DDEV to interact with your Magento 2 instance](#use-ddev-to-interact-with-your-magento-2-instance)
   - [Test a module](#test-a-module)
-    - [Examples](#examples)
-    - [How to](#how-to)
+- [Technical details](#technical-details)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
