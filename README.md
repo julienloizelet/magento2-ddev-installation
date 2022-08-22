@@ -84,7 +84,7 @@ Please note that available versions depend on the chosen `magento_repository`.
 
 You have to pass a JSON string. For example:
 ```json
-{qq
+{
   "http-basic": {
     "repo.magento.com": {
       "username": "**********************",
