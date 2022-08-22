@@ -54,8 +54,8 @@ jobs:
           fi
           README_VERSION=$(grep -E "julienloizelet/github-actions-magento2-ddev-installation@v(.*)"  README.md | sed 's/ //g')
           echo $README_VERSION
-          echo "julienloizelet/github-actions-magento2-ddev-installation@v${{ env.VERSION_NUMBER }}"
-          if [[ $README_VERSION == "julienloizelet/github-actions-magento2-ddev-installation@v${{ env.VERSION_NUMBER }}" ]]
+          echo "-uses:julienloizelet/github-actions-magento2-ddev-installation@v${{ env.VERSION_NUMBER }}"
+          if [[ $README_VERSION == "-uses:julienloizelet/github-actions-magento2-ddev-installation@v${{ env.VERSION_NUMBER }}" ]]
           then
               echo "Version in README.md: OK"
           else
