@@ -40,6 +40,12 @@ inputs:
     description: "Install with ready-to-use Varnish"
     default: false
 
+  ddev_repository_ref:
+    type: string
+    required: false
+    default: "v2.4.0"
+    description: "The branch, tag or SHA to checkout for the DDEV repository"
+
 runs:
   using: "composite"
   steps:
@@ -48,18 +54,23 @@ runs:
       with:
         path: .ddev
         repository: julienloizelet/ddev-m2
-        ref: "v2.3.0"
+        ref: ${{ inputs.ddev_repository_ref }}
+
+    - name: Set DDEV expected version
+      id: ddev-expected
+      shell: bash
+      run: echo "::set-output name=version::$(cat .ddev/homeadditions/DDEV_EXPECTED_VERSION.txt)"
 
     - name: Install DDEV
       # @see https://ddev.readthedocs.io/en/stable/#installationupgrade-script-linux-and-macos-armarm64-and-amd64-architectures
       env:
-        DDEV_VERSION: v1.21.1
+        DDEV_VERSION: ${{ steps.ddev-expected.outputs.version }}
       shell: bash
       run: |
         sudo apt-get -qq update
         sudo apt-get -qq -y install libnss3-tools
         curl -LO https://raw.githubusercontent.com/drud/ddev/master/scripts/install_ddev.sh
-        bash install_ddev.sh ${{env.DDEV_VERSION}}
+        bash install_ddev.sh v${{env.DDEV_VERSION}}
         ddev config global --instrumentation-opt-in=false --omit-containers=dba,ddev-ssh-agent
         rm install_ddev.sh
 
