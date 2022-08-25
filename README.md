@@ -31,7 +31,7 @@ _We will suppose here that you want to test on a Magento 2.4.5 instance with PHP
 You can add the following step in your workflow:
 
 ```yaml
-- uses: julienloizelet/github-actions-magento2-ddev-installation@v1.0.0
+- uses: julienloizelet/github-actions-magento2-ddev-installation@v1.1.0
   with:
     php_version: "8.1"
     magento_version: "2.4.5"
@@ -50,26 +50,26 @@ In the steps that follow, you will be able to run any DDEV commands to interact 
 The following keys are available as `step.with` keys:
 
 ---
-- `php_version`(_String_): PHP version to use in the web container. Default: `8.1`.
+- `php_version` (_String_): PHP version to use in the web container. Default: `8.1`.
 
 Allowed values are: `7.2`, `7.3`, `7.4`, `8.1`.
 
 Please choose a PHP version that is compatible with the `magento_version` below.
 
 ---
-- `magento_repository`(_String_): Where to install Magento from. Default: `https://mirror.mage-os.org/`.
+- `magento_repository` (_String_): Where to install Magento from. Default: `https://mirror.mage-os.org/`.
 
 Could be "https://mirror.mage-os.org/", "https://repo.magento.com/" or any available fork.
 
 Please choose a repository that handle the `magento_version` below.
 
 ---
-- `magento_edition`(_String_):  The edition of Magento to install. Default: `magento/project-community-edition`
+- `magento_edition` (_String_):  The edition of Magento to install. Default: `magento/project-community-edition`
 
 Could be "magento/project-community-edition", "magento/project-enterprise-edition" or any available edition.
 
 ---
-- `magento_version`(_String_): The Magento release version to install.  Default: `2.4.5`.
+- `magento_version` (_String_): The Magento release version to install.  Default: `2.4.5`.
 
 You can use `X.Y.Z` format or `X.Y.Z-pN` format for patch release.
 
@@ -79,7 +79,7 @@ Allowed versions are `2.3.0`, `2.3.1`, `2.3.2`, `2.3.3`, `2.3.4`, `2.3.5`, `2.3.
 Please note that available versions depend on the chosen `magento_repository`.
 
 ---
-- `composer_auth`(_String_): Composer authentication credentials. Default: `""`.
+- `composer_auth` (_String_): Composer authentication credentials. Default: `""`.
 
 
 You have to pass a JSON string. For example:
@@ -98,8 +98,18 @@ json in a `M2_COMPOSER_AUTH` secret and use it like this: `composer_auth: ${{ se
 
 ---
 
-- `varnish_setup`(_Boolean_): Install with ready-to-use Varnish. Default: `false`.
+- `varnish_setup` (_Boolean_): Install with ready-to-use Varnish. Default: `false`.
+
+
   You should use quote to set true:  `varnish_setup: "true"`.
+
+---
+
+
+- `ddev_repository_ref` (_String_): The branch, tag or SHA for checkout the DDEV repository. Default: `v2.4.0`.
+
+
+  The Magento 2 DDEV specific repo is [https://github.com/julienloizelet/ddev-m2,](https://github.com/julienloizelet/ddev-m2) and you can set here a specific reference (`vx.y.z`, `main`, etc.) 
 
 ---
 
