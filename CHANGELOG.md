@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [1.2.0] - 2022-08-26
+
+### Added
+
+- Add `m2_url` output to retrieve freshly installed Magento 2 instance url
+
 ## [1.1.0] - 2022-08-26
 
 ### Added

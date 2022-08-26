@@ -31,7 +31,7 @@ _We will suppose here that you want to test on a Magento 2.4.5 instance with PHP
 You can add the following step in your workflow:
 
 ```yaml
-- uses: julienloizelet/github-actions-magento2-ddev-installation@v1.1.0
+- uses: julienloizelet/github-actions-magento2-ddev-installation@v1.2.0
   with:
     php_version: "8.1"
     magento_version: "2.4.5"
@@ -42,7 +42,7 @@ This step will install a Magento `2.4.5` instance with PHP `8.1`.
 In the steps that follow, you will be able to run any DDEV commands to interact with the Magento 2 environment.
 
 
-## Settings
+## Inputs
 
 
 ### Available keys
@@ -116,7 +116,7 @@ json in a `M2_COMPOSER_AUTH` secret and use it like this: `composer_auth: ${{ se
 
 ### Examples
 
-- Magento `2.3.7-p4` (`magento/project-community-edition`) , from `https://repo.magento.com/`, with PHP 7.4 and 
+- Magento `2.3.7-p4` (`magento/project-community-edition`) , from `https://repo.magento.com/`, with PHP `7.4` and 
   without Varnish:
 
 ```
@@ -127,7 +127,7 @@ with:
   composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}
 ```
 
-- Magento `2.4.4` (`magento/project-community-edition`) , from `https://mirror.mage-os.org/`, with PHP 8.1 and
+- Magento `2.4.4` (`magento/project-community-edition`) , from `https://mirror.mage-os.org/`, with PHP `8.1` and
   with Varnish:
 
 
@@ -137,6 +137,17 @@ with:
   magento_version: "2.4.4"
   varnish_setup: "true"
 ```
+
+## Outputs
+
+The following keys are available as `outputs` keys:
+
+---
+- `m2_url` (_String_): The freshly installed Magento 2 instance url. Example: `https://m245.ddevs.site`.
+
+
+---
+
 
 
 ## Usage

@@ -187,7 +187,7 @@ runs:
 
 outputs:
   m2_url:
-    description: "The freshly installed Magento 2 website url."
+    description: "The freshly installed Magento 2 instance url."
     value: ${{ steps.magento2-settings.outputs.url }}
 
 branding:
