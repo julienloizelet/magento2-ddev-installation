@@ -143,7 +143,7 @@ with:
 The following keys are available as `outputs` keys:
 
 ---
-- `m2_url` (_String_): The freshly installed Magento 2 instance url. Example: `https://m245.ddevs.site`.
+- `m2_url` (_String_): The freshly installed Magento 2 instance url. Example: `https://m245.ddev.site`.
 
 
 ---
