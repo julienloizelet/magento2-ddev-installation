@@ -9,7 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add `ddev_repository_ref` input to allow choosing version, branch or commit sha of ddev-m2 repo
+- Add `ddev_repository_ref` input to allow choosing version, branch or commit sha of `ddev-m2` repo
+
+### Changed
+
+- Use expected DDEV version as set in the `ddev-m2` repo
 
 ## [1.0.0] - 2022-08-22
 

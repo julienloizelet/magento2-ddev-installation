@@ -49,6 +49,7 @@ inputs:
 runs:
   using: "composite"
   steps:
+
     - name: Clone DDEV Magento 2 specific files
       uses: actions/checkout@v3
       with:

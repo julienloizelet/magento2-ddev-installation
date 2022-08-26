@@ -59,7 +59,7 @@ Please choose a PHP version that is compatible with the `magento_version` below.
 ---
 - `magento_repository` (_String_): Where to install Magento from. Default: `https://mirror.mage-os.org/`.
 
-Could be "https://mirror.mage-os.org/", "https://repo.magento.com/" or any available fork.
+Could be "https://mirror.mage-os.org/", "https://repo.magento.com/" or any available repository.
 
 Please choose a repository that handle the `magento_version` below.
 
