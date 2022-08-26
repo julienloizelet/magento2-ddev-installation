@@ -80,6 +80,7 @@ jobs:
         if: startsWith(matrix.m2-version, '2.4')
         run: |
           sudo chmod -R 777 ${{ github.workspace }}
+          rm -Rf ${{ github.workspace }}/generated
           ddev magento maintenance:enable
           ddev magento module:disable Magento_TwoFactorAuth
           ddev magento maintenance:disable
