@@ -100,7 +100,7 @@ jobs:
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
           fi
-          sleep 2
+          sleep 5
           VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
@@ -115,7 +115,7 @@ jobs:
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
           fi
-          sleep 2
+          
           VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
@@ -130,7 +130,7 @@ jobs:
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
           fi
-          sleep 2
+          sleep 5
           VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-3.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
@@ -145,7 +145,7 @@ jobs:
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
           fi
-          sleep 2
+          sleep 5
           VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/category-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
@@ -160,7 +160,7 @@ jobs:
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
           fi
-          sleep 2
+          sleep 5
           VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/category-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
@@ -175,7 +175,7 @@ jobs:
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
           fi
-          sleep 2
+          sleep 5
           VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
@@ -198,7 +198,7 @@ jobs:
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
           fi
-          sleep 2
+          sleep 5
           VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
@@ -213,7 +213,7 @@ jobs:
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
           fi
-          sleep 2
+          sleep 5
           VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
@@ -228,7 +228,7 @@ jobs:
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
           fi
-          sleep 2
+          sleep 5
           VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-3.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
@@ -247,7 +247,7 @@ jobs:
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
           fi
-          sleep 2
+          sleep 5
           VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
