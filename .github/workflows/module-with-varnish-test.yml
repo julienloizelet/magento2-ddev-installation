@@ -69,6 +69,7 @@ jobs:
         # The directory "/var/www/html/generated/code" cannot be deleted Warning!rmdir(/var/www/html/generated/code): Directory not empty
         run: |
           sudo chmod -R 777 ${{ github.workspace }}
+          rm -Rf ${{ github.workspace }}/generated
           ddev magento maintenance:enable
           ddev magento module:enable ${{ env.EXTENSION_NAME }}
           ddev magento maintenance:disable
@@ -92,96 +93,119 @@ jobs:
 
       - name: Varnish MISS and HIT test
         run: |
-          ddev magento cache:flush
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:MISS"* ]]
           then
             echo "Test 1 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 1 OK"
           fi
-          sleep 5
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          sleep 3
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
             echo "Test 2 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 2 OK"
           fi
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:MISS"* ]]
           then
             echo "Test 3 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 3 OK"
           fi
           
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
             echo "Test 4 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 4 OK"
           fi
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-3.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-3.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:MISS"* ]]
           then
             echo "Test 5 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 5 OK"
           fi
-          sleep 5
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-3.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          sleep 3
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-3.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
             echo "Test 6 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 6 OK"
           fi
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/category-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/category-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:MISS"* ]]
           then
             echo "Test 7 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 7 OK"
           fi
-          sleep 5
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/category-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          sleep 3
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/category-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
             echo "Test 8 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 8 OK"
           fi
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/category-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/category-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:MISS"* ]]
           then
             echo "Test 9 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 9 OK"
           fi
-          sleep 5
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/category-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          sleep 3
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/category-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
             echo "Test 10 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 10 OK"
           fi
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:MISS"* ]]
           then
             echo "Test 11 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 11 OK"
           fi
-          sleep 5
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          sleep 3
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
             echo "Test 12 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 12 OK"
           fi
 
       - name: Varnish product update test
@@ -191,68 +215,84 @@ jobs:
           ddev exec ./update-product-price.sh https://${{ env.M2_VERSION_CODE }}.ddev.site product_dynamic_1
           ddev exec ./update-product-price.sh https://${{ env.M2_VERSION_CODE }}.ddev.site product_dynamic_2
           ddev exec ./update-product-price.sh https://${{ env.M2_VERSION_CODE }}.ddev.site product_dynamic_3
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:MISS"* ]]
           then
             echo "Test 1 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 1 OK"
           fi
-          sleep 5
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          sleep 3
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-1.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
             echo "Test 2 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 2 OK"
           fi
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:MISS"* ]]
           then
             echo "Test 3 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 3 OK"
           fi
-          sleep 5
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          sleep 3
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-2.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
             echo "Test 4 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 4 OK"
           fi
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-3.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-3.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:MISS"* ]]
           then
             echo "Test 5 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 5 OK"
           fi
-          sleep 5
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-3.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          sleep 3
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site/simple-product-3.html | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
             echo "Test 6 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 6 OK"
           fi
 
       - name: Varnish FPC clean test
         run: |
           ddev magento cache:clean full_page
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:MISS"* ]]
           then
             echo "Test 1 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 1 OK"
           fi
-          sleep 5
-          VERIF=$(ddev exec curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site | grep -E "^x-eqp-cache:" | sed 's/ //g')
+          sleep 3
+          VERIF=$(curl -sSL -D - https://${{ env.M2_VERSION_CODE }}.ddev.site | grep -E "^x-eqp-cache:" | sed 's/ //g')
           if [[ $VERIF != *"x-eqp-cache:HIT"* ]]
           then
             echo "Test 2 failed"
             echo "Bad Varnish x-eqp-cache : ${VERIF}"
             exit 1
+          else
+            echo "Test 2 OK"
           fi
 
