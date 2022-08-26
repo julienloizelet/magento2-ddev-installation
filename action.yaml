@@ -81,6 +81,12 @@ runs:
       run: |
         echo "M2_VERSION_CODE=$(echo m${{ inputs.magento_version }} | grep  -oP "^m([0-9]{1,}\.)([0-9]{1,}\.)([0-9]{1,})(-(p)\.[0-9]{1,})?" | sed 's/\.//g' )" >> $GITHUB_ENV
 
+    - name: Set Magento 2 settings
+      shell: bash
+      id: magento2-settings
+      run: |
+        echo "::set-output name=url::https://${{ env.M2_VERSION_CODE }}.ddev.site"
+
     - name: Set COMPOSER_AUTH
       shell: bash
       if: ${{inputs.composer_auth}}
@@ -162,7 +168,7 @@ runs:
       shell: bash
       run: |
         ddev magento setup:install \
-                         --base-url=https://${{ env.M2_VERSION_CODE }}.ddev.site \
+                         --base-url=${{ steps.magento2-settings.outputs.url }} \
                          --db-host=db \
                          --db-name=db \
                          --db-user=db \
@@ -178,6 +184,11 @@ runs:
                          --timezone=America/Chicago \
                          --use-rewrites=1 \
                          ${{ env.ELASTIC_INSTALL_STRING }}
+
+outputs:
+  m2_url:
+    description: "The freshly installed Magento 2 website url."
+    value: ${{ steps.magento2-settings.outputs.url }}
 
 branding:
   icon: "code"
