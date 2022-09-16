@@ -4,6 +4,7 @@
 [![Installation with Varnish](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml)
 [![Installation with Static and Unit tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml)
 [![End-to-end tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml)
+[![MFTF tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/mftf-tests.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/mftf-tests.yml)
 
 A GitHub Action for installing Magento 2 with [DDEV](https://github.com/drud/ddev).
 
@@ -107,7 +108,8 @@ json in a `M2_COMPOSER_AUTH` secret and use it like this: `composer_auth: ${{ se
 ---
 
 
-- `ddev_repository_ref` (_String_): The branch, tag or SHA for checkout the DDEV repository. Default: `v2.4.0`.
+- `ddev_repository_ref` (_String_): The branch, tag or SHA for checkout the Magento2 specific DDEV repository. 
+  Default: `v2.4.0`.
 
 
   The Magento 2 DDEV specific repo is [https://github.com/julienloizelet/ddev-m2,](https://github.com/julienloizelet/ddev-m2) and you can set here a specific reference (`vx.y.z`, `main`, etc.) 
@@ -153,9 +155,12 @@ The following keys are available as `outputs` keys:
 
 ## Usage
 
-### Use DDEV to interact with your Magento 2 instance
+### Test your Magento 2 instance
 
 You could run all the DDEV basic commands and some specific ones coming from [my M2/DDEV repo](https://github.com/julienloizelet/ddev-m2).
+
+
+#### Examples
 
 For example, you could run these commands in some other steps: 
 
@@ -166,6 +171,11 @@ ddev magento module:disable Magento_TwoFactorAuth
 ddev magento indexer:reindex
 ddev magento c:c
 ```
+
+#### MFTF
+
+If you want to use the [Magento Functional Testing Framework](https://devdocs.magento.com/mftf/docs/introduction.html),
+here is an example of implementation : [MFTF tests](.github/workflows/mftf-tests.yml)
 
 
 ### Test a module
