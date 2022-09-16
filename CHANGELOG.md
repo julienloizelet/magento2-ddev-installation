@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Add default `ddev_repository_ref` to `v2.5.0` for Magento Functional Testing Framework (MFTF) 
+- Changed default `ddev_repository_ref` input value to `v2.5.0` for Magento Functional Testing Framework (MFTF) 
 ---
 
 ## [1.2.0](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/releases/tag/v1.2.0) - 2022-08-26
