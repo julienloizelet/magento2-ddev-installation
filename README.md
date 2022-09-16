@@ -139,7 +139,7 @@ The branch, tag or SHA for checkout the Magento2 specific DDEV repository.
 Default: `v2.5.0`.
 
 
-The Magento 2 DDEV specific repo is [https://github.com/julienloizelet/ddev-m2,](https://github.com/julienloizelet/ddev-m2) and you can set here a specific reference (`vx.y.z`, `main`, etc.) 
+The Magento 2 DDEV specific repo is [https://github.com/julienloizelet/ddev-m2,](https://github.com/julienloizelet/ddev-m2) and you can set here a specific reference (`vx.y.z`, `master`, etc.) 
 
 ---
 
