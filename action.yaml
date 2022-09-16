@@ -44,7 +44,7 @@ inputs:
     type: string
     required: false
     default: "v2.4.0"
-    description: "The branch, tag or SHA to checkout for the DDEV repository"
+    description: "The branch, tag or SHA to checkout for the Magento2 specific DDEV repository"
 
 runs:
   using: "composite"

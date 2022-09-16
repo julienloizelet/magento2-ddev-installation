@@ -44,6 +44,7 @@ jobs:
         with:
           php_version: ${{ matrix.php-version }}
           magento_version: ${{ matrix.m2-version }}
+          ddev_repository_ref: "master"
 
       - name: Add playwright to DDEV
         run: |

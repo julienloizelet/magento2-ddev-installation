@@ -107,7 +107,8 @@ json in a `M2_COMPOSER_AUTH` secret and use it like this: `composer_auth: ${{ se
 ---
 
 
-- `ddev_repository_ref` (_String_): The branch, tag or SHA for checkout the DDEV repository. Default: `v2.4.0`.
+- `ddev_repository_ref` (_String_): The branch, tag or SHA for checkout the Magento2 specific DDEV repository. 
+  Default: `v2.4.0`.
 
 
   The Magento 2 DDEV specific repo is [https://github.com/julienloizelet/ddev-m2,](https://github.com/julienloizelet/ddev-m2) and you can set here a specific reference (`vx.y.z`, `main`, etc.) 

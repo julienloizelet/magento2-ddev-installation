@@ -48,6 +48,7 @@ jobs:
           composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}
           magento_repository: ${{ matrix.magento-repository }}
           varnish_setup: "true"
+          ddev_repository_ref: "master"
 
       - name: Clone ${{ env.EXTENSION_NAME }} module files
         uses: actions/checkout@v3

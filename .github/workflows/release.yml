@@ -44,18 +44,29 @@ jobs:
       - name: Check version ${{ env.VERSION_NUMBER }} consistency in CHANGELOG and README
         run: |
           CURRENT_DATE=$(date +'%Y-%m-%d')
-          CHANGELOG_VERSION=$(grep -o -E "## \[(.*)\] - $CURRENT_DATE"  CHANGELOG.md | head -1 | sed 's/ //g')
-          if [[ $CHANGELOG_VERSION == "##[${{ env.VERSION_NUMBER }}]-$CURRENT_DATE" ]]
+          CHANGELOG_VERSION=$(grep -o -E "## \[(.*)\].* - $CURRENT_DATE"  CHANGELOG.md | head -1 | sed 's/ //g')
+          if [[ $CHANGELOG_VERSION == "##[${{ env.VERSION_NUMBER }}]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/v${{ env.VERSION_NUMBER }})-$CURRENT_DATE" ]]
           then
-          echo "CHANGELOG VERSION OK"
+            echo "CHANGELOG VERSION OK"
           else
-          echo "CHANGELOG VERSION KO"
-          exit 1
+            echo "CHANGELOG VERSION KO"
+            exit 1
           fi
-          README_VERSION=$(grep -E "julienloizelet/github-actions-magento2-ddev-installation@v(.*)"  README.md | sed 's/ //g')
+          COMPARISON=$(grep -oP "\/compare\/\K(.*)$" CHANGELOG.md | head -1)
+          LAST_TAG=$(curl -Ls -o /dev/null -w %{url_effective} $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/latest | grep -oP "\/tag\/\K(.*)$")
+          if [[ $COMPARISON == "$LAST_TAG...v${{ env.VERSION_NUMBER }})" ]]
+          then
+            echo "VERSION COMPARISON OK"
+          else
+            echo "VERSION COMPARISON KO"
+            echo $COMPARISON
+            echo "$LAST_TAG...v${{ env.VERSION_NUMBER }})"
+            exit 1
+          fi
+          README_VERSION=$(grep -E "$GITHUB_REPOSITORY@v(.*)"  README.md | sed 's/ //g')
           echo $README_VERSION
-          echo "-uses:julienloizelet/github-actions-magento2-ddev-installation@v${{ env.VERSION_NUMBER }}"
-          if [[ $README_VERSION == "-uses:julienloizelet/github-actions-magento2-ddev-installation@v${{ env.VERSION_NUMBER }}" ]]
+          echo "-uses:$GITHUB_REPOSITORY@v${{ env.VERSION_NUMBER }}"
+          if [[ $README_VERSION == "-uses:$GITHUB_REPOSITORY@v${{ env.VERSION_NUMBER }}" ]]
           then
               echo "Version in README.md: OK"
           else
@@ -77,7 +88,7 @@ jobs:
 
       - name: Prepare release notes
         run: |
-          VERSION_RELEASE_NOTES=$(awk -v ver="[${{ env.VERSION_NUMBER }}]" '/^## / { if (p) { exit }; if ($2 == ver) { p=1; next} } p && NF' CHANGELOG.md)
+          VERSION_RELEASE_NOTES=$(awk -v ver="[${{ env.VERSION_NUMBER }}]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/v${{ env.VERSION_NUMBER }})" '/^## / { if (p) { exit }; if ($2 == ver) { p=1; next} } p && NF' CHANGELOG.md | sed ':a;N;$!ba;s/\n---/ /g')
           echo "$VERSION_RELEASE_NOTES" >> CHANGELOG.txt
 
       - name: Create release ${{ env.VERSION_NUMBER }}

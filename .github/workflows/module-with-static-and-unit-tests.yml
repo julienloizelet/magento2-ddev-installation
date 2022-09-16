@@ -49,6 +49,7 @@ jobs:
           magento_version: ${{ matrix.m2-version }}
           composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}
           magento_repository: ${{ matrix.magento-repository }}
+          ddev_repository_ref: "master"
 
       - name: Clone ${{ env.EXTENSION_NAME }} module files
         uses: actions/checkout@v3

@@ -1,0 +1,66 @@
+name: MFTF tests
+on:
+  push:
+    branches:
+      - main
+      - feat/mftf
+    paths-ignore:
+      - '**.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mftf-test-suite:
+    strategy:
+      fail-fast: false
+      matrix:
+        # Last version
+        m2-version: [ "2.4.5" ]
+        php-version: [ "8.1" ]
+
+
+    name: MFTF test suite
+    if: ${{ !contains(github.event.head_commit.message, 'chore(') }}
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Clone current repository
+        uses: actions/checkout@v3
+
+      - name: Install Magento 2 with DDEV
+        id: magento2-install
+        uses: ./
+        with:
+          php_version: ${{ matrix.php-version }}
+          magento_version: ${{ matrix.m2-version }}
+          ddev_repository_ref: "master"
+
+      - name: Add Selenium to DDEV
+        run: |
+          cp .ddev/additional_docker_compose/docker-compose.selenium.yaml .ddev/docker-compose.selenium.yaml
+          cp .ddev/custom_files/mftf/.credentials dev/tests/acceptance/.credentials
+          cp .ddev/custom_files/mftf/.env.dist dev/tests/acceptance/.env
+          sed -i -e 's,REPLACE_BASE_URL,${{ steps.magento2-install.outputs.m2_url }},' dev/tests/acceptance/.env
+          cp .ddev/nginx/mftf.conf.dist .ddev/nginx/mftf.conf
+          ddev restart
+
+      - name: Disable some extensions for 2.4
+        if: startsWith(matrix.m2-version, '2.4')
+        run: |
+          ddev magento module:disable Magento_TwoFactorAuth
+          ddev magento module:disable Magento_AdminNotification
+
+      - name: Prepare for MFTF test
+        run: |
+          ddev magento config:set cms/wysiwyg/enabled disabled
+          ddev magento config:set admin/security/admin_account_sharing 1
+          ddev magento config:set admin/security/use_form_key 0
+          ddev magento cache:clean config full_page
+          ddev exec vendor/bin/mftf build:project
+
+      - name: Run AdminCreateNewCustomerOnStorefrontTest
+        run: ddev exec vendor/bin/mftf run:test AdminCreateNewCustomerOnStorefrontTest
+
