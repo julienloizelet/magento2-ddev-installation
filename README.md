@@ -33,7 +33,7 @@ _We will suppose here that you want to test on a Magento 2.4.5 instance with PHP
 You can add the following step in your workflow:
 
 ```yaml
-- uses: julienloizelet/github-actions-magento2-ddev-installation@v1.2.0
+- uses: julienloizelet/github-actions-magento2-ddev-installation@v1.3.0
   with:
     php_version: "8.1"
     magento_version: "2.4.5"
@@ -109,7 +109,7 @@ json in a `M2_COMPOSER_AUTH` secret and use it like this: `composer_auth: ${{ se
 
 
 - `ddev_repository_ref` (_String_): The branch, tag or SHA for checkout the Magento2 specific DDEV repository. 
-  Default: `v2.4.0`.
+  Default: `v2.5.0`.
 
 
   The Magento 2 DDEV specific repo is [https://github.com/julienloizelet/ddev-m2,](https://github.com/julienloizelet/ddev-m2) and you can set here a specific reference (`vx.y.z`, `main`, etc.) 
