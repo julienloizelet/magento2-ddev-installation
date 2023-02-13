@@ -96,6 +96,7 @@ jobs:
         run: |
           ddev magento config:set system/full_page_cache/caching_application 2
           ddev magento setup:performance:generate-fixtures ./varnish-profile.xml
+          ddev magento setup:static-content:deploy -f
 
       - name: Varnish MISS and HIT test
         run: |
@@ -307,6 +308,6 @@ jobs:
         with:
           limit-access-to-actor: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          timeout-minutes: 60
+        timeout-minutes: 60
         if: always() && github.event.inputs.debug_enabled == 'true'
 
