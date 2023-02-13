@@ -5,6 +5,8 @@ on:
       - main
     paths-ignore:
       - '**.md'
+  schedule:
+    - cron: '25 08 * * *'
   workflow_dispatch:
 
 permissions:
@@ -112,3 +114,12 @@ jobs:
         run: |
           cd ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd/__scripts__
           ./run-tests.sh ci "./__tests__/2-handle-update.js"
+
+      # keepalive-workflow adds a dummy commit if there's no other action here, keeps
+      # GitHub from turning off tests after 60 days
+      - uses: gautamkrishnar/keepalive-workflow@v1
+        with:
+          commit_message: "chore(*): Automated commit to keep the repository active"
+          time_elapsed: 55
+
+
