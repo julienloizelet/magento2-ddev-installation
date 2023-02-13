@@ -6,6 +6,11 @@ on:
     paths-ignore:
       - '**.md'
   workflow_dispatch:
+    inputs:
+      debug_enabled:
+        type: boolean
+        description: Debug with tmate
+        default: false
 
 permissions:
   contents: read
@@ -296,4 +301,12 @@ jobs:
           else
             echo "Test 2 OK"
           fi
+
+      - name: Debug with tmate
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          timeout-minutes: 60
+        if: always() && github.event.inputs.debug_enabled == 'true'
 
