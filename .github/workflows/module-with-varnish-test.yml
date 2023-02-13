@@ -83,20 +83,20 @@ jobs:
           ddev magento deploy:mode:set production
           ddev magento indexer:reindex
 
-      - name: Disable some extensions for 2.4
-        if: startsWith(matrix.m2-version, '2.4')
-        run: |
-          sudo chmod -R 777 ${{ github.workspace }}
-          rm -Rf ${{ github.workspace }}/generated
-          ddev magento maintenance:enable
-          ddev magento module:disable --clear-static-content Magento_TwoFactorAuth
-          ddev magento maintenance:disable
-
       - name: Prepare for Varnish tests
         run: |
           ddev magento config:set system/full_page_cache/caching_application 2
           ddev magento setup:performance:generate-fixtures ./varnish-profile.xml
+
+      - name: Disable some extensions for 2.4
+        if: startsWith(matrix.m2-version, '2.4')
+        run: |
+          ddev magento maintenance:enable
+          ddev magento module:disable --clear-static-content  Magento_TwoFactorAuth
+          ddev magento cache:clean
+          ddev magento cache:flush
           ddev magento setup:static-content:deploy -f
+          ddev magento maintenance:disable
 
       - name: Varnish MISS and HIT test
         run: |
