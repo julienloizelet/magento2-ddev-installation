@@ -84,7 +84,7 @@ jobs:
           sudo chmod -R 777 ${{ github.workspace }}
           rm -Rf ${{ github.workspace }}/generated
           ddev magento maintenance:enable
-          ddev magento module:disable Magento_TwoFactorAuth
+          ddev magento module:disable --clear-static-content Magento_TwoFactorAuth
           ddev magento maintenance:disable
 
       - name: Prepare for Varnish tests
