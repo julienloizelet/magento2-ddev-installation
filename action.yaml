@@ -43,7 +43,7 @@ inputs:
   ddev_repository_ref:
     type: string
     required: false
-    default: "v2.7.0"
+    default: "v2.7.1"
     description: "The branch, tag or SHA to checkout for the Magento2 specific DDEV repository"
 
 runs:
@@ -147,6 +147,11 @@ runs:
         ddev composer config --no-interaction allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
         ddev composer config --no-interaction allow-plugins.laminas/laminas-dependency-plugin true
         ddev composer config --no-interaction allow-plugins.magento/* true
+
+    - name: Fixup Composer version audit plugin
+      shell: bash
+      run: |
+          ddev composer config repositories.0 '{"type": "composer", "url":"${{ inputs.magento_repository }}",  "exclude": ["magento/composer-dependency-version-audit-plugin"]}'
 
     - name: Fixup Monolog
       # @see https://github.com/magento/magento2/pull/35596
