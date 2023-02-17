@@ -65,7 +65,7 @@ jobs:
         run: |
           ddev composer config --unset repositories.0
           ddev composer config repositories.0 '{"type": "path", "url":"my-own-modules/${{ env.EXTENSION_PATH }}/",  "canonical": true}'
-          ddev composer config repositories.1 '{"type": "composer", "url":"${{ matrix.magento-repository }}",  "exclude": ["${{ env.EXTENSION_PACKAGE_NAME }}", "magento/composer-dependency-version-audit-plugin"]}'
+          ddev composer config repositories.1 '{"type": "composer", "url":"${{ matrix.magento-repository }}",  "exclude": ["${{ env.EXTENSION_PACKAGE_NAME }}"]}'
 
       - name: Add ${{ env.EXTENSION_NAME }} as composer dependency
         run: ddev composer require ${{ env.EXTENSION_PACKAGE_NAME }}:@dev --no-interaction

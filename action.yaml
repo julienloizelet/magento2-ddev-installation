@@ -150,8 +150,9 @@ runs:
 
     - name: Fixup Composer version audit plugin
       shell: bash
+      # @see https://github.com/magento/composer/issues/34#issuecomment-1432920391
       run: |
-          ddev composer config repositories.0 '{"type": "composer", "url":"${{ inputs.magento_repository }}",  "exclude": ["magento/composer-dependency-version-audit-plugin"]}'
+          ddev composer config repositories.packagist '{"type": "composer", "url":"https://packagist.org",  "exclude": ["magento/composer"]}'
 
     - name: Fixup Monolog
       # @see https://github.com/magento/magento2/pull/35596
