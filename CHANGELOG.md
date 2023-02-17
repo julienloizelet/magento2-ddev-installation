@@ -5,16 +5,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [1.6.0](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/releases/tag/v1.6.0) - 2023-02-17
-[_Compare with previous release_](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/compare/v1.5.0...v1.6.0)
-
-### Changed
-
-- Exclude `magento/composer` from packagist repository ([magento/composer/issues/#34](https://github.com/magento/composer/issues/34#issuecomment-1432920391))
-- Do not exclude `magento/composer-dependency-version-audit-plugin` from composer magento repository
-
----
-
 ## [1.5.0](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/releases/tag/v1.5.0) - 2023-02-16
 [_Compare with previous release_](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/compare/v1.4.0...v1.5.0)
 
