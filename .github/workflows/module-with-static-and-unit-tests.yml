@@ -16,18 +16,15 @@ jobs:
       fail-fast: false
       matrix:
         # First and last patch for the current and previous minor, greatest php version
-        m2-version: [ "2.3.0", "2.3.7", "2.4.0", "2.4.5" ]
-        php-version: [ "7.2", "7.4", "8.1" ]
-        magento-repository: [ "https://repo.magento.com/" ]
-        exclude:
-          - { php-version: "7.4", m2-version: "2.3.0" }
-          - { php-version: "8.1", m2-version: "2.3.0" }
-          - { php-version: "7.2", m2-version: "2.3.7" }
-          - { php-version: "8.1", m2-version: "2.3.7" }
-          - { php-version: "7.2", m2-version: "2.4.0" }
-          - { php-version: "8.1", m2-version: "2.4.0" }
-          - { php-version: "7.2", m2-version: "2.4.5" }
-          - { php-version: "7.4", m2-version: "2.4.5" }
+        include:
+          - m2-version: '2.3.0'
+            php-version: '7.2'
+          - m2-version: '2.3.7'
+            php-version: '7.4'
+          - m2-version: '2.4.0'
+            php-version: '7.4'
+          - m2-version: '2.4.6'
+            php-version: '8.2'
 
     name: Static and unit test suite
     runs-on: ubuntu-latest

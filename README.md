@@ -56,9 +56,9 @@ The following keys are available as `step.with` keys:
 
 PHP version to use in the web container.
 
-Default: `8.1`.
+Default: `8.2`.
 
-Allowed values are: `7.2`, `7.3`, `7.4`, `8.1`.
+Allowed values are: `7.2`, `7.3`, `7.4`, `8.1`, `8.2`.
 
 Please choose a PHP version that is compatible with the `magento_version` below.
 
@@ -87,12 +87,12 @@ Could be "magento/project-community-edition", "magento/project-enterprise-editio
 
 The Magento release version to install.  
 
-Default: `2.4.5`.
+Default: `2.4.6`.
 
 You can use `X.Y.Z` format or `X.Y.Z-pN` format for patch release.
 
 Allowed versions are `2.3.0`, `2.3.1`, `2.3.2`, `2.3.3`, `2.3.4`, `2.3.5`, `2.3.6`, `2.3.7`, `2.4.0`,
-  `2.4.1`, `2.4.2`, `2.4.3`,`2.4.4`, `2.4.5` and any of their patches versions. 
+  `2.4.1`, `2.4.2`, `2.4.3`,`2.4.4`, `2.4.5`, `2.4.6` and any of their patches versions. 
 
 Please note that available versions depend on the chosen `magento_repository`.
 
@@ -136,7 +136,7 @@ You should use quote to set true:  `varnish_setup: "true"`.
 
 The branch, tag or SHA for checkout the Magento2 specific DDEV repository. 
   
-Default: `v2.5.0`.
+Default: `v2.8.0`.
 
 
 The Magento 2 DDEV specific repo is [https://github.com/julienloizelet/ddev-m2,](https://github.com/julienloizelet/ddev-m2) and you can set here a specific reference (`vx.y.z`, `master`, etc.) 

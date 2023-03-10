@@ -18,12 +18,13 @@ jobs:
       fail-fast: false
       matrix:
         # Last 2 patches for the current minor, and last one for the previous minor, greatest php version
-        m2-version: [ "2.3.7-p4", "2.4.4", "2.4.5" ]
-        php-version: [ "7.4", "8.1" ]
-        exclude:
-          - { php-version: "8.1", m2-version: "2.3.7-p4" }
-          - { php-version: "7.4", m2-version: "2.4.4" }
-          - { php-version: "7.4", m2-version: "2.4.5" }
+        include:
+          - m2-version: '2.3.7-p4'
+            php-version: '7.4'
+          - m2-version: '2.4.5'
+            php-version: '8.1'
+          - m2-version: '2.4.6'
+            php-version: '8.2'
 
 
     name: End-to-end test suite
