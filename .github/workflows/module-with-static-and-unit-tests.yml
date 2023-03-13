@@ -19,12 +19,16 @@ jobs:
         include:
           - m2-version: '2.3.0'
             php-version: '7.2'
+            magento-repository: 'https://repo.magento.com/'
           - m2-version: '2.3.7'
             php-version: '7.4'
+            magento-repository: 'https://repo.magento.com/'
           - m2-version: '2.4.0'
             php-version: '7.4'
+            magento-repository: 'https://repo.magento.com/'
           - m2-version: '2.4.6'
             php-version: '8.2'
+            magento-repository: 'https://repo.magento.com/'
 
     name: Static and unit test suite
     runs-on: ubuntu-latest
@@ -70,7 +74,7 @@ jobs:
           ddev exec vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/
           ddev composer require --dev phpstan/phpstan:0.12.23 bitexpert/phpstan-magento:v0.10.0
           mkdir dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan
-          cp .ddev/custom_files/phpstan.neon dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/phpstan.neon
+          cp .ddev/okaeli-add-on/magento2/custom_files/phpstan.neon dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/phpstan.neon
 
       - name: PHP CODE SNIFFER
         run: |

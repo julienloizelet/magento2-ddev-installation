@@ -132,18 +132,6 @@ You should use quote to set true:  `varnish_setup: "true"`.
 ---
 
 
-- `ddev_repository_ref` (_String_)
-
-The branch, tag or SHA for checkout the Magento2 specific DDEV repository. 
-  
-Default: `v2.8.0`.
-
-
-The Magento 2 DDEV specific repo is [https://github.com/julienloizelet/ddev-m2,](https://github.com/julienloizelet/ddev-m2) and you can set here a specific reference (`vx.y.z`, `master`, etc.) 
-
----
-
-
 ### Examples
 
 - Magento `2.3.7-p4` (`magento/project-community-edition`) , from `https://repo.magento.com/`, with PHP `7.4` and 
@@ -231,7 +219,7 @@ $GITHUB_WORKSPACE
 │
 └───.ddev
 │   │   
-│   │ (Cloned sources of a Magento 2 DDEV specific repo)
+│   │ (DDEV files)
 │   
 └───my-own-modules
     │   
@@ -329,10 +317,10 @@ $GITHUB_WORKSPACE
 │
 └───.ddev
     │   
-    │ (Cloned sources of a Magento 2 DDEV specific repo)
+    │ (DDEV files)
 ```
 
-The Magento 2 DDEV specific repo is https://github.com/julienloizelet/ddev-m2: it includes some others DDEV custom
+The DDEV specific add-on repo is https://github.com/julienloizelet/ddev-add-on: it includes some others DDEV custom
 commands and files.
 
 

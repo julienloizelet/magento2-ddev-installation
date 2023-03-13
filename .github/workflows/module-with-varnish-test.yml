@@ -217,7 +217,7 @@ jobs:
 
       - name: Varnish product update test
         run: |
-          cp .ddev/custom_scripts/update-product-price.sh update-product-price.sh
+          cp .ddev/okaeli-add-on/magento2/custom_scripts/update-product-price.sh update-product-price.sh
           chmod +x update-product-price.sh
           ddev exec ./update-product-price.sh ${{ steps.magento2-install.outputs.m2_url }} product_dynamic_1
           ddev exec ./update-product-price.sh ${{ steps.magento2-install.outputs.m2_url }} product_dynamic_2

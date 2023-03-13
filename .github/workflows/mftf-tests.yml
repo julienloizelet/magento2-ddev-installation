@@ -17,7 +17,8 @@ jobs:
       matrix:
         # Last version
         m2-version: [ "2.4.6" ]
-        php-version: [ "8.2" ]
+        php-version: [ "8.6" ]
+        magento-repository: ['https://repo.magento.com/']
 
 
     name: MFTF test suite
@@ -35,15 +36,19 @@ jobs:
         with:
           php_version: ${{ matrix.php-version }}
           magento_version: ${{ matrix.m2-version }}
+          magento_repository: ${{ matrix.magento-repository }}
 
       - name: Add Selenium to DDEV
         run: |
-          cp .ddev/additional_docker_compose/docker-compose.selenium.yaml .ddev/docker-compose.selenium.yaml
-          cp .ddev/custom_files/mftf/.credentials dev/tests/acceptance/.credentials
-          cp .ddev/custom_files/mftf/.env.dist dev/tests/acceptance/.env
+          ddev get julienloizelet/ddev-magento2-mftf
+          cp .ddev/okaeli-add-on/magento2/custom_files/mftf/.credentials dev/tests/acceptance/.credentials
+          cp .ddev/okaeli-add-on/magento2/custom_files/mftf/.env.dist dev/tests/acceptance/.env
           sed -i -e 's,REPLACE_BASE_URL,${{ steps.magento2-install.outputs.m2_url }},' dev/tests/acceptance/.env
-          cp .ddev/nginx/mftf.conf.dist .ddev/nginx/mftf.conf
           ddev restart
+
+      - name: Configure Nginx for MFTF
+        run: |
+          cd .ddev && ddev nginx-config okaeli-add-on/magento2/custom_files/mftf/nginx-site.conf
 
       - name: Disable some extensions for 2.4
         if: startsWith(matrix.m2-version, '2.4')

@@ -5,14 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## [1.6.0](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/releases/tag/v1.6.0) - 2023-03-??
-[_Compare with previous release_](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/compare/v1.5.0...v1.6.0)
+## [2.0.0](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/releases/tag/v2.0.0) - 2023-03-??
+[_Compare with previous release_](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/compare/v1.5.0...v2.0.0)
 
 ### Changed
 
+- Use `julienloizelet/ddev-add-on` instead of `julienloizelet/ddev-m2` as DDEV specifics sources 
 - Changed default `magento_version` input value to `2.4.6`
 - Changed default `php_version` input value to `8.2`
-- Changed default `ddev_repository_ref` input value to `v2.8.0`
 
 ---
 
