@@ -57,6 +57,11 @@ jobs:
           magento_repository: ${{ matrix.magento-repository }}
           composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}
 
+      - name: Set M2_VERSION_CODE env
+        # used in some directory path and conventional file naming (Example : 2.4.3 => m243; 2.3.7-p4 => m237)
+        run: |
+          echo "M2_VERSION_CODE=$(echo m${{ matrix.m2-version }} | grep  -oP "^m([0-9]{1,}\.)([0-9]{1,}\.)([0-9]{1,})(-(p)\.[0-9]{1,})?" | sed 's/\.//g' )" >> $GITHUB_ENV     
+
       - name: Add playwright to DDEV
         run: |
           ddev get julienloizelet/ddev-playwright
@@ -121,14 +126,18 @@ jobs:
           chmod +x run-tests.sh
 
       - name: Config test
-        run: |
-          cd ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd/__scripts__
-          ./run-tests.sh ci "./__tests__/1-config.js"
+        uses: ./.github/workflows/end-to-end/run-single-test
+        with:
+          test_path: ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd
+          file_path: 1-config.js
+          m2_version: ${{ env.M2_VERSION_CODE }}
 
       - name: Update layout handle test
-        run: |
-          cd ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd/__scripts__
-          ./run-tests.sh ci "./__tests__/2-handle-update.js"
+        uses: ./.github/workflows/end-to-end/run-single-test
+        with:
+          test_path: ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd
+          file_path: 2-handle-update.js
+          m2_version: ${{ env.M2_VERSION_CODE }}
 
       # keepalive-workflow adds a dummy commit if there's no other action here, keeps
       # GitHub from turning off tests after 60 days
