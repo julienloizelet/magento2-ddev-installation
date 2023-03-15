@@ -76,14 +76,9 @@ jobs:
         run: ddev composer require ${{ env.EXTENSION_PACKAGE_NAME }}:@dev --no-interaction
 
       - name: Installation tests
-        # chmod 777 to minimize chance to get the following error:
-        # The directory "/var/www/html/generated/code" cannot be deleted Warning!rmdir(/var/www/html/generated/code): Directory not empty
         run: |
-          sudo chmod -R 777 ${{ github.workspace }}
-          rm -Rf ${{ github.workspace }}/generated
-          ddev magento maintenance:enable
-          ddev magento module:enable ${{ env.EXTENSION_NAME }}
-          ddev magento maintenance:disable
+          ddev magento module:enable --clear-static-content ${{ env.EXTENSION_NAME }}
+          ddev magento setup:static-content:deploy -f
           ddev magento setup:upgrade
           ddev magento deploy:mode:set production
           ddev magento indexer:reindex
@@ -98,6 +93,7 @@ jobs:
         run: |
           ddev magento maintenance:enable
           ddev magento module:disable --clear-static-content Magento_AdminAdobeImsTwoFactorAuth
+          ddev magento setup:static-content:deploy -f
           ddev magento maintenance:disable
 
       - name: Disable some extensions for 2.4
@@ -105,8 +101,6 @@ jobs:
         run: |
           ddev magento maintenance:enable
           ddev magento module:disable --clear-static-content  Magento_TwoFactorAuth
-          ddev magento cache:clean
-          ddev magento cache:flush
           ddev magento setup:static-content:deploy -f
           ddev magento maintenance:disable
 
