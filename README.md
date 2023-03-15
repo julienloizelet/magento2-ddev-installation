@@ -1,10 +1,10 @@
 # Magento 2 installation with DDEV
 
-[![Version](https://img.shields.io/github/v/release/julienloizelet/github-actions-magento2-ddev-installation)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/releases)
-[![Installation with Varnish](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml)
-[![Installation with Static and Unit tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml)
-[![End-to-end tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml)
-[![MFTF tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/mftf-tests.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/mftf-tests.yml)
+[![Version](https://img.shields.io/github/v/release/julienloizelet/magento2-ddev-installation)](https://github.com/julienloizelet/magento2-ddev-installation/releases)
+[![Installation with Varnish](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml)
+[![Installation with Static and Unit tests](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml)
+[![End-to-end tests](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml)
+[![MFTF tests](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/mftf-tests.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/mftf-tests.yml)
 
 A GitHub Action for installing Magento 2 with [DDEV](https://github.com/drud/ddev).
 
@@ -33,7 +33,7 @@ _We will suppose here that you want to test on a Magento 2.4.5 instance with PHP
 You can add the following step in your workflow:
 
 ```yaml
-- uses: julienloizelet/github-actions-magento2-ddev-installation@v1.5.0
+- uses: julienloizelet/magento2-ddev-installation@v2.0.0
   with:
     php_version: "8.1"
     magento_version: "2.4.5"
@@ -174,7 +174,7 @@ The freshly installed Magento 2 instance url. Example: `https://m245.ddev.site`.
 
 ### Test your Magento 2 instance
 
-You could run all the DDEV basic commands and some specific ones coming from [my M2/DDEV repo](https://github.com/julienloizelet/ddev-m2).
+You could run all the DDEV basic commands and some specific ones coming from some DDEV add-ons
 
 
 #### Examples
@@ -296,9 +296,7 @@ bin/magento setup:install \
 ```
 
 
-The Magento 2 environment is a Docker environment created  with DDEV and comes with the
-following
-services:
+The Magento 2 environment is a Docker environment created  with DDEV and comes with the following services:
 - `web`: PHP `8.1`, nginx-fpm, NodeJs
 - `db`: MariaDb
 - `elastisearch`
@@ -319,11 +317,6 @@ $GITHUB_WORKSPACE
     │   
     │ (DDEV files)
 ```
-
-The DDEV specific add-on repo is https://github.com/julienloizelet/ddev-add-on: it includes some others DDEV custom
-commands and files.
-
-
 
 ## License
 
