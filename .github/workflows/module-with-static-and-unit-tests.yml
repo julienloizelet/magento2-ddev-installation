@@ -41,7 +41,7 @@ jobs:
       EXTENSION_NAME: "Okaeli_CategoryCode"
       EXTENSION_PATH: "okaeli-category-code"
       EXTENSION_GITHUB_URL: "julienloizelet/magento2-category-code"
-      EXTENSION_REF: "v1.1.10"
+      EXTENSION_REF: "v1.1.11"
     steps:
 
       - name: Clone current repository
