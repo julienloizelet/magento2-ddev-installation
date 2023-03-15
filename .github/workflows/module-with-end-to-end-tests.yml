@@ -24,10 +24,10 @@ jobs:
             magento-repository: 'https://repo.magento.com/'
           - m2-version: '2.4.5'
             php-version: '8.1'
-            magento-repository: 'https://repo.magento.com/'
+            magento-repository: 'https://mirror.mage-os.org/'
           - m2-version: '2.4.6'
             php-version: '8.2'
-            magento-repository: 'https://mirror.mage-os.org/'
+            magento-repository: 'https://repo.magento.com/'
 
 
     name: End-to-end test suite
@@ -51,6 +51,7 @@ jobs:
           php_version: ${{ matrix.php-version }}
           magento_version: ${{ matrix.m2-version }}
           magento_repository: ${{ matrix.magento-repository }}
+          composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}
 
       - name: Add playwright to DDEV
         run: |
@@ -77,6 +78,11 @@ jobs:
       - name: Add ${{ env.EXTENSION_NAME }} as composer dependency
         run: |
           ddev composer require ${{ env.EXTENSION_PACKAGE_NAME }}:@dev --no-interaction
+
+      - name: Disable some extensions for 2.4.6
+        if: startsWith(matrix.m2-version, '2.4.6')
+        run: |
+          ddev magento module:disable Magento_AdminAdobeImsTwoFactorAuth
 
       - name: Disable some extensions for 2.4
         if: startsWith(matrix.m2-version, '2.4')

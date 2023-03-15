@@ -91,7 +91,7 @@ runs:
     - name: Set ELASTIC_INSTALL_STRING env for 2.4
       shell: bash
       if: startsWith(inputs.magento_version, '2.4')
-      run: echo "ELASTIC_INSTALL_STRING='--elasticsearch-host=elasticsearch'" >> $GITHUB_ENV
+      run: echo "ELASTIC_INSTALL_STRING=--elasticsearch-host=elasticsearch --search-engine=elasticsearch7" >> $GITHUB_ENV
 
     - name: Set ELASTIC_INSTALL_STRING env for 2.3
       shell: bash

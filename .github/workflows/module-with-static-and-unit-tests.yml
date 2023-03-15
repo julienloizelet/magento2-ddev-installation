@@ -91,6 +91,11 @@ jobs:
           ddev exec cat dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/phpstan.neon
           ddev phpstan vendor/${{ env.EXTENSION_PACKAGE_NAME }} --debug
 
+      - name: Fix Unit Test for Magento 2.4.6
+        # @see https://github.com/magento/magento2/issues/36702
+        if: contains(fromJson('["2.4.6"]'),matrix.m2-version)
+        run: sed -i  's/allure\/allure.config.php/dev\/tests\/unit\/allure\/allure.config.php/g' dev/tests/unit/phpunit.xml.dist
+
       - name: PHP UNIT
         run: |
           ddev phpunit vendor/${{ env.EXTENSION_PACKAGE_NAME }}/Test/Unit

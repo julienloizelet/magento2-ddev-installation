@@ -17,7 +17,7 @@ jobs:
       matrix:
         # Last version
         m2-version: [ "2.4.6" ]
-        php-version: [ "8.6" ]
+        php-version: [ "8.2" ]
         magento-repository: ['https://repo.magento.com/']
 
 
@@ -37,6 +37,7 @@ jobs:
           php_version: ${{ matrix.php-version }}
           magento_version: ${{ matrix.m2-version }}
           magento_repository: ${{ matrix.magento-repository }}
+          composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}
 
       - name: Add Selenium to DDEV
         run: |
@@ -49,6 +50,11 @@ jobs:
       - name: Configure Nginx for MFTF
         run: |
           cd .ddev && ddev nginx-config okaeli-add-on/magento2/custom_files/mftf/nginx-site.conf
+
+      - name: Disable some extensions for 2.4.6
+        if: startsWith(matrix.m2-version, '2.4.6')
+        run: |
+          ddev magento module:disable Magento_AdminAdobeImsTwoFactorAuth
 
       - name: Disable some extensions for 2.4
         if: startsWith(matrix.m2-version, '2.4')
