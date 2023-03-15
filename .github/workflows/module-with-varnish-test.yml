@@ -15,18 +15,23 @@ on:
 permissions:
   contents: read
 
+env:
+  # Allow ddev get to use a GitHub token to prevent rate limiting by tests
+  DDEV_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   installation-and-varnish-test-suite:
     strategy:
       fail-fast: false
       matrix:
         # Last one for the current and previous minor, greatest php version
-        m2-version: [ "2.3.7-p4", "2.4.5" ]
-        php-version: [ "7.4", "8.1" ]
+        m2-version: [ "2.3.7-p4", "2.4.6" ]
+        php-version: [ "7.4", "8.2" ]
         magento-repository: [ "https://repo.magento.com/", "https://mirror.mage-os.org/" ]
         exclude:
-          - { php-version: "8.1", m2-version: "2.3.7-p4" }
-          - { php-version: "7.4", m2-version: "2.4.5" }
+          - { php-version: "8.2", m2-version: "2.3.7-p4" }
+          - { php-version: "7.4", m2-version: "2.4.6" }
+          - { php-version: "8.2", m2-version: "2.4.6", "magento-repository" : "https://mirror.mage-os.org/" }
 
     name: Installation and Varnish test suite
     # @see https://devdocs.magento.com/marketplace/sellers/installation-and-varnish-tests.html
@@ -71,14 +76,9 @@ jobs:
         run: ddev composer require ${{ env.EXTENSION_PACKAGE_NAME }}:@dev --no-interaction
 
       - name: Installation tests
-        # chmod 777 to minimize chance to get the following error:
-        # The directory "/var/www/html/generated/code" cannot be deleted Warning!rmdir(/var/www/html/generated/code): Directory not empty
         run: |
-          sudo chmod -R 777 ${{ github.workspace }}
-          rm -Rf ${{ github.workspace }}/generated
-          ddev magento maintenance:enable
-          ddev magento module:enable ${{ env.EXTENSION_NAME }}
-          ddev magento maintenance:disable
+          ddev magento module:enable --clear-static-content ${{ env.EXTENSION_NAME }}
+          ddev magento setup:static-content:deploy -f
           ddev magento setup:upgrade
           ddev magento deploy:mode:set production
           ddev magento indexer:reindex
@@ -88,13 +88,19 @@ jobs:
           ddev magento config:set system/full_page_cache/caching_application 2
           ddev magento setup:performance:generate-fixtures ./varnish-profile.xml
 
+      - name: Disable some extensions for 2.4.6
+        if: startsWith(matrix.m2-version, '2.4.6')
+        run: |
+          ddev magento maintenance:enable
+          ddev magento module:disable --clear-static-content Magento_AdminAdobeImsTwoFactorAuth
+          ddev magento setup:static-content:deploy -f
+          ddev magento maintenance:disable
+
       - name: Disable some extensions for 2.4
         if: startsWith(matrix.m2-version, '2.4')
         run: |
           ddev magento maintenance:enable
           ddev magento module:disable --clear-static-content  Magento_TwoFactorAuth
-          ddev magento cache:clean
-          ddev magento cache:flush
           ddev magento setup:static-content:deploy -f
           ddev magento maintenance:disable
 
@@ -217,7 +223,7 @@ jobs:
 
       - name: Varnish product update test
         run: |
-          cp .ddev/custom_scripts/update-product-price.sh update-product-price.sh
+          cp .ddev/okaeli-add-on/magento2/custom_scripts/update-product-price.sh update-product-price.sh
           chmod +x update-product-price.sh
           ddev exec ./update-product-price.sh ${{ steps.magento2-install.outputs.m2_url }} product_dynamic_1
           ddev exec ./update-product-price.sh ${{ steps.magento2-install.outputs.m2_url }} product_dynamic_2

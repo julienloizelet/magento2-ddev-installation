@@ -1,10 +1,10 @@
 # Magento 2 installation with DDEV
 
-[![Version](https://img.shields.io/github/v/release/julienloizelet/github-actions-magento2-ddev-installation)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/releases)
-[![Installation with Varnish](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml)
-[![Installation with Static and Unit tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml)
-[![End-to-end tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml)
-[![MFTF tests](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/mftf-tests.yml/badge.svg)](https://github.com/julienloizelet/github-actions-magento2-ddev-installation/actions/workflows/mftf-tests.yml)
+[![Version](https://img.shields.io/github/v/release/julienloizelet/magento2-ddev-installation)](https://github.com/julienloizelet/magento2-ddev-installation/releases)
+[![Installation with Varnish](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml)
+[![Installation with Static and Unit tests](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml)
+[![End-to-end tests](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml)
+[![MFTF tests](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/mftf-tests.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/mftf-tests.yml)
 
 A GitHub Action for installing Magento 2 with [DDEV](https://github.com/drud/ddev).
 
@@ -33,7 +33,7 @@ _We will suppose here that you want to test on a Magento 2.4.5 instance with PHP
 You can add the following step in your workflow:
 
 ```yaml
-- uses: julienloizelet/github-actions-magento2-ddev-installation@v1.5.0
+- uses: julienloizelet/magento2-ddev-installation@v2.0.0
   with:
     php_version: "8.1"
     magento_version: "2.4.5"
@@ -56,9 +56,9 @@ The following keys are available as `step.with` keys:
 
 PHP version to use in the web container.
 
-Default: `8.1`.
+Default: `8.2`.
 
-Allowed values are: `7.2`, `7.3`, `7.4`, `8.1`.
+Allowed values are: `7.2`, `7.3`, `7.4`, `8.1`, `8.2`.
 
 Please choose a PHP version that is compatible with the `magento_version` below.
 
@@ -87,12 +87,12 @@ Could be "magento/project-community-edition", "magento/project-enterprise-editio
 
 The Magento release version to install.  
 
-Default: `2.4.5`.
+Default: `2.4.6`.
 
 You can use `X.Y.Z` format or `X.Y.Z-pN` format for patch release.
 
 Allowed versions are `2.3.0`, `2.3.1`, `2.3.2`, `2.3.3`, `2.3.4`, `2.3.5`, `2.3.6`, `2.3.7`, `2.4.0`,
-  `2.4.1`, `2.4.2`, `2.4.3`,`2.4.4`, `2.4.5` and any of their patches versions. 
+  `2.4.1`, `2.4.2`, `2.4.3`,`2.4.4`, `2.4.5`, `2.4.6` and any of their patches versions. 
 
 Please note that available versions depend on the chosen `magento_repository`.
 
@@ -128,18 +128,6 @@ Default: `false`.
 
 
 You should use quote to set true:  `varnish_setup: "true"`.
-
----
-
-
-- `ddev_repository_ref` (_String_)
-
-The branch, tag or SHA for checkout the Magento2 specific DDEV repository. 
-  
-Default: `v2.5.0`.
-
-
-The Magento 2 DDEV specific repo is [https://github.com/julienloizelet/ddev-m2,](https://github.com/julienloizelet/ddev-m2) and you can set here a specific reference (`vx.y.z`, `master`, etc.) 
 
 ---
 
@@ -186,7 +174,7 @@ The freshly installed Magento 2 instance url. Example: `https://m245.ddev.site`.
 
 ### Test your Magento 2 instance
 
-You could run all the DDEV basic commands and some specific ones coming from [my M2/DDEV repo](https://github.com/julienloizelet/ddev-m2).
+You could run all the DDEV basic commands and some specific ones coming from some DDEV add-ons
 
 
 #### Examples
@@ -231,7 +219,7 @@ $GITHUB_WORKSPACE
 │
 └───.ddev
 │   │   
-│   │ (Cloned sources of a Magento 2 DDEV specific repo)
+│   │ (DDEV files)
 │   
 └───my-own-modules
     │   
@@ -308,9 +296,7 @@ bin/magento setup:install \
 ```
 
 
-The Magento 2 environment is a Docker environment created  with DDEV and comes with the
-following
-services:
+The Magento 2 environment is a Docker environment created  with DDEV and comes with the following services:
 - `web`: PHP `8.1`, nginx-fpm, NodeJs
 - `db`: MariaDb
 - `elastisearch`
@@ -329,13 +315,8 @@ $GITHUB_WORKSPACE
 │
 └───.ddev
     │   
-    │ (Cloned sources of a Magento 2 DDEV specific repo)
+    │ (DDEV files)
 ```
-
-The Magento 2 DDEV specific repo is https://github.com/julienloizelet/ddev-m2: it includes some others DDEV custom
-commands and files.
-
-
 
 ## License
 

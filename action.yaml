@@ -19,7 +19,7 @@ inputs:
   magento_version:
     type: string
     required: false
-    default: "2.4.5"
+    default: "2.4.6"
     description: "The Magento release version to install"
 
   magento_repository:
@@ -40,46 +40,40 @@ inputs:
     description: "Install with ready-to-use Varnish"
     default: false
 
-  ddev_repository_ref:
-    type: string
-    required: false
-    default: "v2.7.1"
-    description: "The branch, tag or SHA to checkout for the Magento2 specific DDEV repository"
-
 runs:
   using: "composite"
   steps:
 
-    - name: Clone DDEV Magento 2 specific files
-      uses: actions/checkout@v3
-      with:
-        path: .ddev
-        repository: julienloizelet/ddev-m2
-        ref: ${{ inputs.ddev_repository_ref }}
-
-    - name: Set DDEV expected version
-      id: ddev-expected
-      shell: bash
-      run: echo "version=$(cat .ddev/homeadditions/DDEV_EXPECTED_VERSION.txt)" >> "${GITHUB_OUTPUT}"
-
     - name: Install DDEV
       # @see https://ddev.readthedocs.io/en/stable/#installationupgrade-script-linux-and-macos-armarm64-and-amd64-architectures
-      env:
-        DDEV_VERSION: ${{ steps.ddev-expected.outputs.version }}
       shell: bash
       run: |
-        sudo apt-get -qq update
-        sudo apt-get -qq -y install libnss3-tools
-        curl -LO https://raw.githubusercontent.com/drud/ddev/master/scripts/install_ddev.sh
-        bash install_ddev.sh v${{env.DDEV_VERSION}}
+        curl -fsSL https://apt.fury.io/drud/gpg.key | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/ddev.gpg > /dev/null
+        echo "deb [signed-by=/etc/apt/trusted.gpg.d/ddev.gpg] https://apt.fury.io/drud/ * *" | sudo tee /etc/apt/sources.list.d/ddev.list
+        sudo apt-get -q update
+        sudo apt-get -q -y install libnss3-tools ddev
+        mkcert -install
         ddev config global --instrumentation-opt-in=false --omit-containers=dba,ddev-ssh-agent
-        rm install_ddev.sh
 
     - name: Set M2_VERSION_CODE env
       # used in some directory path and conventional file naming (Example : 2.4.3 => m243; 2.3.7-p4 => m237)
       shell: bash
       run: |
-        echo "M2_VERSION_CODE=$(echo m${{ inputs.magento_version }} | grep  -oP "^m([0-9]{1,}\.)([0-9]{1,}\.)([0-9]{1,})(-(p)\.[0-9]{1,})?" | sed 's/\.//g' )" >> $GITHUB_ENV
+        echo "M2_VERSION_CODE=$(echo m${{ inputs.magento_version }} | grep  -oP "^m([0-9]{1,}\.)([0-9]{1,}\.)([0-9]{1,})(-(p)\.[0-9]{1,})?" | sed 's/\.//g' )" >> $GITHUB_ENV    
+
+    - name: Create empty Magento 2 DDEV project
+      shell: bash
+      run: ddev config --project-type=magento2 --project-name=${{ env.M2_VERSION_CODE }} --docroot=pub --create-docroot --disable-settings-management
+
+    - name: Install DDEV tools add-on
+      shell: bash
+      run: |
+        ddev get julienloizelet/ddev-tools
+        cp -r .ddev/okaeli-add-on/magento2/commands/* .ddev/commands
+
+    - name: Prepare Elastic search
+      shell: bash
+      run: ddev get ddev/ddev-elasticsearch
 
     - name: Set Magento 2 settings
       shell: bash
@@ -96,26 +90,31 @@ runs:
     - name: Set ELASTIC_INSTALL_STRING env for 2.4
       shell: bash
       if: startsWith(inputs.magento_version, '2.4')
-      run: echo "ELASTIC_INSTALL_STRING='--elasticsearch-host=elasticsearch'" >> $GITHUB_ENV
+      run: echo "ELASTIC_INSTALL_STRING=--elasticsearch-host=elasticsearch --search-engine=elasticsearch7" >> $GITHUB_ENV
 
     - name: Set ELASTIC_INSTALL_STRING env for 2.3
       shell: bash
       if: startsWith(inputs.magento_version, '2.3')
       run: echo "ELASTIC_INSTALL_STRING=" >> $GITHUB_ENV
 
-    - name: Prepare DDEV
+    - name: Handle PHP version
       shell: bash
       run: |
-        cp .ddev/config_overrides/config.${{ env.M2_VERSION_CODE }}.yaml .ddev/config.${{ env.M2_VERSION_CODE }}.yaml
-        sed -i -e 's/^php_version:.*/php_version: ${{ inputs.php_version }}/g' .ddev/config.${{ env.M2_VERSION_CODE }}.yaml
+        sed -i -e 's/^php_version:.*/php_version: "${{ inputs.php_version }}"/g' .ddev/config.yaml
+
+    - name: Handle composer version
+      shell: bash
+      if: contains(fromJson('["2.3.0","2.3.1","2.3.2","2.3.3","2.3.4","2.3.5","2.3.6","2.4.0","2.4.1"]'),matrix.m2-version)
+      run: |
+        sed -i -e 's/^composer_version:.*/composer_version: "1"/g' .ddev/config.yaml    
 
     - name: Prepare Varnish
       shell: bash
       if: inputs.varnish_setup == 'true'
       run: |
-        cp .ddev/custom_files/varnish-profile.xml varnish-profile.xml
-        cp .ddev/custom_files/default.vcl .ddev/varnish/default.vcl
-        cp .ddev/additional_docker_compose/docker-compose.varnish.yaml .ddev/docker-compose.varnish.yaml
+        ddev get ddev/ddev-varnish
+        cp .ddev/okaeli-add-on/magento2/custom_files/varnish-profile.xml varnish-profile.xml
+        cp .ddev/okaeli-add-on/magento2/custom_files/default.vcl .ddev/varnish/default.vcl
 
     - name: Start DDEV for ${{ inputs.magento_version }} with PHP ${{ inputs.php_version }}
       shell: bash

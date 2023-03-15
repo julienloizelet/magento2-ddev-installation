@@ -10,24 +10,29 @@ on:
 permissions:
   contents: read
 
+env:
+  # Allow ddev get to use a GitHub token to prevent rate limiting by tests
+  DDEV_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   static-and-unit-test-suite:
     strategy:
       fail-fast: false
       matrix:
         # First and last patch for the current and previous minor, greatest php version
-        m2-version: [ "2.3.0", "2.3.7", "2.4.0", "2.4.5" ]
-        php-version: [ "7.2", "7.4", "8.1" ]
-        magento-repository: [ "https://repo.magento.com/" ]
-        exclude:
-          - { php-version: "7.4", m2-version: "2.3.0" }
-          - { php-version: "8.1", m2-version: "2.3.0" }
-          - { php-version: "7.2", m2-version: "2.3.7" }
-          - { php-version: "8.1", m2-version: "2.3.7" }
-          - { php-version: "7.2", m2-version: "2.4.0" }
-          - { php-version: "8.1", m2-version: "2.4.0" }
-          - { php-version: "7.2", m2-version: "2.4.5" }
-          - { php-version: "7.4", m2-version: "2.4.5" }
+        include:
+          - m2-version: '2.3.0'
+            php-version: '7.2'
+            magento-repository: 'https://repo.magento.com/'
+          - m2-version: '2.3.7'
+            php-version: '7.4'
+            magento-repository: 'https://repo.magento.com/'
+          - m2-version: '2.4.0'
+            php-version: '7.4'
+            magento-repository: 'https://repo.magento.com/'
+          - m2-version: '2.4.6'
+            php-version: '8.2'
+            magento-repository: 'https://repo.magento.com/'
 
     name: Static and unit test suite
     runs-on: ubuntu-latest
@@ -73,7 +78,7 @@ jobs:
           ddev exec vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/
           ddev composer require --dev phpstan/phpstan:0.12.23 bitexpert/phpstan-magento:v0.10.0
           mkdir dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan
-          cp .ddev/custom_files/phpstan.neon dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/phpstan.neon
+          cp .ddev/okaeli-add-on/magento2/custom_files/phpstan.neon dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/phpstan.neon
 
       - name: PHP CODE SNIFFER
         run: |
@@ -89,6 +94,11 @@ jobs:
         run: |
           ddev exec cat dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/phpstan.neon
           ddev phpstan vendor/${{ env.EXTENSION_PACKAGE_NAME }} --debug
+
+      - name: Fix Unit Test for Magento 2.4.6
+        # @see https://github.com/magento/magento2/issues/36702
+        if: contains(fromJson('["2.4.6"]'),matrix.m2-version)
+        run: sed -i  's/allure\/allure.config.php/dev\/tests\/unit\/allure\/allure.config.php/g' dev/tests/unit/phpunit.xml.dist
 
       - name: PHP UNIT
         run: |
