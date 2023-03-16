@@ -42,7 +42,7 @@ jobs:
       EXTENSION_NAME: "Okaeli_CategoryCode"
       EXTENSION_PATH: "category-code"
       EXTENSION_GITHUB_URL: "julienloizelet/magento2-category-code"
-      EXTENSION_REF: "v1.1.11"
+      EXTENSION_REF: "v1.1.12"
 
     steps:
 
@@ -56,11 +56,6 @@ jobs:
           magento_version: ${{ matrix.m2-version }}
           magento_repository: ${{ matrix.magento-repository }}
           composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}
-
-      - name: Set M2_VERSION_CODE env
-        # used in some directory path and conventional file naming (Example : 2.4.3 => m243; 2.3.7-p4 => m237)
-        run: |
-          echo "M2_VERSION_CODE=$(echo m${{ matrix.m2-version }} | grep  -oP "^m([0-9]{1,}\.)([0-9]{1,}\.)([0-9]{1,})(-(p)\.[0-9]{1,})?" | sed 's/\.//g' )" >> $GITHUB_ENV     
 
       - name: Add playwright to DDEV
         run: |
@@ -130,14 +125,12 @@ jobs:
         with:
           test_path: ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd
           file_path: 1-config.js
-          m2_version: ${{ env.M2_VERSION_CODE }}
 
       - name: Update layout handle test
         uses: ./.github/workflows/end-to-end/run-single-test
         with:
           test_path: ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd
           file_path: 2-handle-update.js
-          m2_version: ${{ env.M2_VERSION_CODE }}
 
       # keepalive-workflow adds a dummy commit if there's no other action here, keeps
       # GitHub from turning off tests after 60 days

@@ -10,9 +10,10 @@ inputs:
     required: true
     description: "Path to the js test file"
 
-  m2_version:
-    required: true
-    description: "Magento 2 version"
+  report_file_path:
+    required: false
+    description: "Path to the report output"
+    default: ".test-results.json"
 
 runs:
   using: "composite"
@@ -23,7 +24,7 @@ runs:
         cd ${{ inputs.test_path }}/__scripts__
         ./run-tests.sh ci "./__tests__/${{ inputs.file_path }}"
         cd ${{ inputs.test_path }}
-        PENDING_TESTS=$(grep -oP '"numPendingTests":\K(.*),"numRuntimeErrorTestSuites"' .test-results-${{ inputs.m2_version }}.json | sed  's/,"numRuntimeErrorTestSuites"//g')
+        PENDING_TESTS=$(grep -oP '"numPendingTests":\K(.*),"numRuntimeErrorTestSuites"' ${{ inputs.report_file_path }} | sed  's/,"numRuntimeErrorTestSuites"//g')
         if [[ $PENDING_TESTS == "0" ]]
         then
         echo "No pending tests: OK"
