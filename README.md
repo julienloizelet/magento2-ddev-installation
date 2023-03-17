@@ -24,6 +24,7 @@ A GitHub Action to install Magento 2 with [DDEV](https://github.com/ddev/ddev).
   - [Test a module](#test-a-module)
 - [Technical details](#technical-details)
 - [License](#license)
+- [Contribute](#contribute)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
