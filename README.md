@@ -6,7 +6,7 @@
 [![End-to-end tests](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml)
 [![MFTF tests](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/mftf-tests.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/mftf-tests.yml)
 
-A GitHub Action for installing Magento 2 with [DDEV](https://github.com/ddev/ddev).
+A GitHub Action to install Magento 2 with [DDEV](https://github.com/ddev/ddev).
 
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
