@@ -58,7 +58,9 @@ jobs:
           composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}
 
       - name: Add playwright to DDEV
-        run: ddev get julienloizelet/ddev-playwright
+        run: |
+          ddev get julienloizelet/ddev-playwright
+          ddev restart
 
       - name: Clone M2 ${{ env.EXTENSION_NAME }} files
         uses: actions/checkout@v3

@@ -1,6 +1,7 @@
 # Magento 2 installation with DDEV
 
 [![Version](https://img.shields.io/github/v/release/julienloizelet/magento2-ddev-installation)](https://github.com/julienloizelet/magento2-ddev-installation/releases)
+![project is maintained](https://img.shields.io/maintenance/yes/2023.svg)
 [![Installation with Varnish](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-varnish-test.yml)
 [![Installation with Static and Unit tests](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-static-and-unit-tests.yml)
 [![End-to-end tests](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml)
