@@ -10,6 +10,16 @@ The [public API](https://semver.org/spec/v2.0.0.html#spec-item-1) of this projec
 
 ---
 
+## [2.1.0](https://github.com/julienloizelet/magento2-ddev-installation/releases/tag/v2.1.0) - 2023-03-17
+[_Compare with previous release_](https://github.com/julienloizelet/magento2-ddev-installation/compare/v2.0.0...v2.1.0)
+
+### Changed
+
+- Remove useless files copy as `ddev-tools` add-on already copied files
+
+
+---
+
 ## [2.0.0](https://github.com/julienloizelet/magento2-ddev-installation/releases/tag/v2.0.0) - 2023-03-15
 [_Compare with previous release_](https://github.com/julienloizelet/magento2-ddev-installation/compare/v1.5.0...v2.0.0)
 

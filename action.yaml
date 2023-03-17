@@ -67,9 +67,7 @@ runs:
 
     - name: Install DDEV tools add-on
       shell: bash
-      run: |
-        ddev get julienloizelet/ddev-tools
-        cp -r .ddev/okaeli-add-on/magento2/commands/* .ddev/commands
+      run: ddev get julienloizelet/ddev-tools
 
     - name: Prepare Elastic search
       shell: bash

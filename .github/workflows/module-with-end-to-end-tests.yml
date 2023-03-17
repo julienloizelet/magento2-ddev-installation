@@ -58,10 +58,7 @@ jobs:
           composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}
 
       - name: Add playwright to DDEV
-        run: |
-          ddev get julienloizelet/ddev-playwright
-          cp .ddev/okaeli-add-on/magento2/custom_files/varnish-profile.xml varnish-profile.xml
-          ddev restart
+        run: ddev get julienloizelet/ddev-playwright
 
       - name: Clone M2 ${{ env.EXTENSION_NAME }} files
         uses: actions/checkout@v3
@@ -110,6 +107,7 @@ jobs:
 
       - name: Prepare for playwright test
         run: |
+          cp .ddev/okaeli-add-on/magento2/custom_files/varnish-profile.xml varnish-profile.xml
           ddev magento setup:performance:generate-fixtures ./varnish-profile.xml
           cd ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}
           mkdir -p view/frontend/layout
