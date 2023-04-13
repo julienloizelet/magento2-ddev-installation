@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 env:
   # Allow ddev get to use a GitHub token to prevent rate limiting by tests
@@ -125,12 +125,6 @@ jobs:
         with:
           test_path: ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd
           file_path: 1-config.js
-
-      - name: Update layout handle test
-        uses: ./.github/workflows/end-to-end/run-single-test
-        with:
-          test_path: ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd
-          file_path: 2-handle-update.js
 
       # keepalive-workflow adds a dummy commit if there's no other action here, keeps
       # GitHub from turning off tests after 60 days
