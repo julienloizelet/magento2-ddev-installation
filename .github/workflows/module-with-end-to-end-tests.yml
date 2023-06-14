@@ -5,8 +5,6 @@ on:
       - main
     paths-ignore:
       - '**.md'
-  schedule:
-    - cron: '25 08 * * *'
   workflow_dispatch:
 
 permissions:
@@ -59,7 +57,7 @@ jobs:
 
       - name: Add playwright to DDEV
         run: |
-          ddev get julienloizelet/ddev-playwright
+          ddev get https://github.com/julienloizelet/ddev-playwright/archive/refs/tags/v1.0.2.tar.gz
           ddev restart
 
       - name: Clone M2 ${{ env.EXTENSION_NAME }} files
@@ -125,12 +123,5 @@ jobs:
         with:
           test_path: ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd
           file_path: 1-config.js
-
-      # keepalive-workflow adds a dummy commit if there's no other action here, keeps
-      # GitHub from turning off tests after 60 days
-      - uses: gautamkrishnar/keepalive-workflow@v1
-        with:
-          commit_message: "chore(*): Automated commit to keep the repository active"
-          time_elapsed: 55
 
 

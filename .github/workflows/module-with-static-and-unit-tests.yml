@@ -5,6 +5,8 @@ on:
       - main
     paths-ignore:
       - '**.md'
+  schedule:
+    - cron: '25 08 * * *'
   workflow_dispatch:
 
 permissions:
@@ -103,3 +105,11 @@ jobs:
       - name: PHP UNIT
         run: |
           ddev phpunit vendor/${{ env.EXTENSION_PACKAGE_NAME }}/Test/Unit
+          
+
+      # keepalive-workflow adds a dummy commit if there's no other action here, keeps
+      # GitHub from turning off tests after 60 days
+      - uses: gautamkrishnar/keepalive-workflow@v1
+        with:
+          commit_message: "chore(*): Automated commit to keep the repository active"
+          time_elapsed: 50
