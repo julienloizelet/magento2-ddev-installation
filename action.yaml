@@ -53,7 +53,7 @@ runs:
         sudo apt-get -q update
         sudo apt-get -q -y install libnss3-tools ddev
         mkcert -install
-        ddev config global --instrumentation-opt-in=false --omit-containers=dba,ddev-ssh-agent
+        ddev config global --instrumentation-opt-in=false --omit-containers=ddev-ssh-agent
 
     - name: Set M2_VERSION_CODE env
       # used in some directory path and conventional file naming (Example : 2.4.3 => m243; 2.3.7-p4 => m237)

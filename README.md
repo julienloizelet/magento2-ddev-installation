@@ -35,7 +35,7 @@ _We will suppose here that you want to test on a Magento 2.4.5 instance with PHP
 You can add the following step in your workflow:
 
 ```yaml
-- uses: julienloizelet/magento2-ddev-installation@v2.1.0
+- uses: julienloizelet/magento2-ddev-installation@v2.1.1
   with:
     php_version: "8.1"
     magento_version: "2.4.5"
