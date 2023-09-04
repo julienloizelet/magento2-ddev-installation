@@ -68,7 +68,7 @@ jobs:
         run: |
           ddev composer config --unset repositories.0
           ddev composer config repositories.0 '{"type": "path", "url":"my-own-modules/${{ env.EXTENSION_PATH }}/",  "canonical": true, "options": {"symlink": false}}'
-          ddev composer config repositories.1 '{"type": "composer", "url":"${{ matrix.magento-repository }}",  "exclude": ["${{ env.EXTENSION_PACKAGE_NAME }}", "magento/composer-dependency-version-audit-plugin", "laminas/laminas-dependency-plugin"]}'
+          ddev composer config repositories.1 '{"type": "composer", "url":"${{ matrix.magento-repository }}",  "exclude": ["${{ env.EXTENSION_PACKAGE_NAME }}", "laminas/laminas-dependency-plugin"]}'
 
       - name: Add ${{ env.EXTENSION_NAME }} as composer dependency
         run: ddev composer require ${{ env.EXTENSION_PACKAGE_NAME }}:@dev --no-interaction
