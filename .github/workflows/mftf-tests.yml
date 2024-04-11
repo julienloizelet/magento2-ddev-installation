@@ -20,8 +20,8 @@ jobs:
       fail-fast: false
       matrix:
         # Last version
-        m2-version: [ "2.4.6" ]
-        php-version: [ "8.2" ]
+        m2-version: [ "2.4.7" ]
+        php-version: [ "8.3" ]
         magento-repository: ['https://repo.magento.com/']
 
 
@@ -32,7 +32,7 @@ jobs:
     steps:
 
       - name: Clone current repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Magento 2 with DDEV
         id: magento2-install
@@ -55,8 +55,8 @@ jobs:
         run: |
           cd .ddev && ddev nginx-config okaeli-add-on/magento2/custom_files/mftf/nginx-site.conf
 
-      - name: Disable some extensions for 2.4.6
-        if: startsWith(matrix.m2-version, '2.4.6')
+      - name: Disable some extensions for 2.4.7
+        if: startsWith(matrix.m2-version, '2.4.7')
         run: |
           ddev magento module:disable Magento_AdminAdobeImsTwoFactorAuth
 

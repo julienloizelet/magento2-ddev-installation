@@ -7,7 +7,7 @@ inputs:
   php_version:
     type: string
     required: false
-    default: "8.1"
+    default: "8.2"
     description: "PHP Version to use"
 
   magento_edition:
@@ -19,7 +19,7 @@ inputs:
   magento_version:
     type: string
     required: false
-    default: "2.4.6"
+    default: "2.4.7"
     description: "The Magento release version to install"
 
   magento_repository:

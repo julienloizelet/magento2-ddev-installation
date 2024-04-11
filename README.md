@@ -35,7 +35,7 @@ _We will suppose here that you want to test on a Magento 2.4.5 instance with PHP
 You can add the following step in your workflow:
 
 ```yaml
-- uses: julienloizelet/magento2-ddev-installation@v2.1.1
+- uses: julienloizelet/magento2-ddev-installation@v3
   with:
     php_version: "8.1"
     magento_version: "2.4.5"
@@ -60,7 +60,7 @@ PHP version to use in the web container.
 
 Default: `8.2`.
 
-Allowed values are: `7.2`, `7.3`, `7.4`, `8.1`, `8.2`.
+Allowed values are: `7.2`, `7.3`, `7.4`, `8.1`, `8.2`, `8.3`.
 
 Please choose a PHP version that is compatible with the `magento_version` below.
 
@@ -89,12 +89,12 @@ Could be "magento/project-community-edition", "magento/project-enterprise-editio
 
 The Magento release version to install.  
 
-Default: `2.4.6`.
+Default: `2.4.7`.
 
 You can use `X.Y.Z` format or `X.Y.Z-pN` format for patch release.
 
 Allowed versions are `2.3.0`, `2.3.1`, `2.3.2`, `2.3.3`, `2.3.4`, `2.3.5`, `2.3.6`, `2.3.7`, `2.4.0`,
-  `2.4.1`, `2.4.2`, `2.4.3`,`2.4.4`, `2.4.5`, `2.4.6` and any of their patches versions. 
+  `2.4.1`, `2.4.2`, `2.4.3`,`2.4.4`, `2.4.5`, `2.4.6`, `2.4.7` and any of their patches versions. 
 
 Please note that available versions depend on the chosen `magento_repository`.
 
@@ -237,7 +237,7 @@ by adapting the following steps:
 
 ```yaml
 - name: Clone module files
-  uses: actions/checkout@v3
+  uses: actions/checkout@v4
   with:
     path: my-own-modules/<some-path>
 ```
@@ -299,12 +299,11 @@ bin/magento setup:install \
 
 
 The Magento 2 environment is a Docker environment created  with DDEV and comes with the following services:
-- `web`: PHP `8.1`, nginx-fpm, NodeJs
+- `web`: PHP, nginx-fpm, NodeJs
 - `db`: MariaDb
 - `elastisearch`
 - `memcached`
 - `redis`
-- `mailhog`
 
 
 Finally, the structure of your `$GITHUB_WORKSPACE` will look like below.
