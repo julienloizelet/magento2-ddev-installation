@@ -35,7 +35,7 @@ _We will suppose here that you want to test on a Magento 2.4.5 instance with PHP
 You can add the following step in your workflow:
 
 ```yaml
-- uses: julienloizelet/magento2-ddev-installation@v2.1.1
+- uses: julienloizelet/magento2-ddev-installation@v3
   with:
     php_version: "8.1"
     magento_version: "2.4.5"
@@ -237,7 +237,7 @@ by adapting the following steps:
 
 ```yaml
 - name: Clone module files
-  uses: actions/checkout@v3
+  uses: actions/checkout@v4
   with:
     path: my-own-modules/<some-path>
 ```
@@ -299,12 +299,11 @@ bin/magento setup:install \
 
 
 The Magento 2 environment is a Docker environment created  with DDEV and comes with the following services:
-- `web`: PHP `8.1`, nginx-fpm, NodeJs
+- `web`: PHP, nginx-fpm, NodeJs
 - `db`: MariaDb
 - `elastisearch`
 - `memcached`
 - `redis`
-- `mailhog`
 
 
 Finally, the structure of your `$GITHUB_WORKSPACE` will look like below.

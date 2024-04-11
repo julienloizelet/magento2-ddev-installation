@@ -10,6 +10,17 @@ The [public API](https://semver.org/spec/v2.0.0.html#spec-item-1) of this projec
 
 ---
 
+## [3.0.0](https://github.com/julienloizelet/magento2-ddev-installation/releases/tag/v3.0.0) - 2024-04-11
+[_Compare with previous release_](https://github.com/julienloizelet/magento2-ddev-installation/compare/v2.1.1...v3.0.0)
+
+### Changed
+
+- **Breaking change**: Use `2.4.7` as default Magento version
+- **Breaking change**: Use `8.3` as default PHP version
+
+
+---
+
 ## [2.1.1](https://github.com/julienloizelet/magento2-ddev-installation/releases/tag/v2.1.1) - 2023-07-25
 [_Compare with previous release_](https://github.com/julienloizelet/magento2-ddev-installation/compare/v2.1.0...v2.1.1)
 
