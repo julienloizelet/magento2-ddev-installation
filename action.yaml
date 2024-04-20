@@ -10,6 +10,12 @@ inputs:
     default: "8.2"
     description: "PHP Version to use"
 
+  database:
+    type: string
+    required: false
+    default: ""
+    description: "Database type and version to use"
+
   magento_edition:
     type: string
     required: false
@@ -58,12 +64,41 @@ runs:
     - name: Set M2_VERSION_CODE env
       # used in some directory path and conventional file naming (Example : 2.4.3 => m243; 2.3.7-p4 => m237)
       shell: bash
+      env:
+        magento_version: ${{ inputs.magento_version }}
       run: |
-        echo "M2_VERSION_CODE=$(echo m${{ inputs.magento_version }} | grep  -oP "^m([0-9]{1,}\.)([0-9]{1,}\.)([0-9]{1,})(-(p)\.[0-9]{1,})?" | sed 's/\.//g' )" >> $GITHUB_ENV    
+        echo "M2_VERSION_CODE=$(echo m$magento_version | grep  -oP "^m([0-9]{1,}\.)([0-9]{1,}\.)([0-9]{1,})(-(p)\.[0-9]{1,})?" | sed 's/\.//g' )" >> $GITHUB_ENV
+        
+
+    - name: Set DDEV_DATABASE env
+      # Use mariadb:10.2 for Magento < 2.4.1 and mariadb:10.4 for Magento >= 2.4.1
+      shell: bash
+      env:
+        magento_version: ${{ inputs.magento_version }}
+        database: ${{ inputs.database }}
+      run: |
+        if [ -n "$database" ]; then
+          echo "DDEV_DATABASE=$database" >> $GITHUB_ENV
+          exit 0
+        fi
+        
+        base_version="${magento_version%-*}"  # Removes patch version if exists
+
+        # Convert the base version to a comparable format for version sorting
+        compare_version() {
+          echo "$1" | awk -F. '{ printf "%03d%03d%03d", $1, $2, $3 }'
+        }
+        
+        # Magento >= 2.4.1 should use MariaDB 10.4
+        if [ "$(compare_version "$base_version")" -ge "$(compare_version "2.4.1")" ]; then
+          echo "DDEV_DATABASE=mariadb:10.4" >> $GITHUB_ENV
+        else
+          echo "DDEV_DATABASE=mariadb:10.2" >> $GITHUB_ENV
+        fi
 
     - name: Create empty Magento 2 DDEV project
       shell: bash
-      run: ddev config --project-type=magento2 --project-name=${{ env.M2_VERSION_CODE }} --docroot=pub --create-docroot --disable-settings-management
+      run: ddev config --project-type=magento2 --project-name=${{ env.M2_VERSION_CODE }} --database ${{ env.DDEV_DATABASE }}  --docroot=pub --create-docroot --disable-settings-management
 
     - name: Install DDEV tools add-on
       shell: bash
@@ -81,9 +116,11 @@ runs:
     - name: Set COMPOSER_AUTH
       shell: bash
       if: ${{inputs.composer_auth}}
+      env:
+        composer_auth: ${{ inputs.composer_auth }}
       run: |
         mkdir -p .ddev/homeadditions/.composer
-        echo '${{ inputs.composer_auth }}' > .ddev/homeadditions/.composer/auth.json
+        echo "$composer_auth" > .ddev/homeadditions/.composer/auth.json
 
     - name: Set ELASTIC_INSTALL_STRING env for 2.4
       shell: bash
@@ -97,8 +134,11 @@ runs:
 
     - name: Handle PHP version
       shell: bash
+      env:
+        php_version: ${{ inputs.php_version }}
       run: |
-        sed -i -e 's/^php_version:.*/php_version: "${{ inputs.php_version }}"/g' .ddev/config.yaml
+        sed -i -e "s/^php_version:.*/php_version: \"$php_version\"/g" .ddev/config.yaml
+
 
     - name: Handle composer version
       shell: bash
@@ -114,7 +154,7 @@ runs:
         cp .ddev/okaeli-add-on/magento2/custom_files/varnish-profile.xml varnish-profile.xml
         cp .ddev/okaeli-add-on/magento2/custom_files/default.vcl .ddev/varnish/default.vcl
 
-    - name: Start DDEV for ${{ inputs.magento_version }} with PHP ${{ inputs.php_version }}
+    - name: Start DDEV
       shell: bash
       run: ddev start
 
@@ -132,8 +172,12 @@ runs:
     - name: Create Magento ${{ inputs.magento_edition }} ${{ inputs.magento_version }} project
       shell: bash
       # We don't use "ddev composer create" as it restarts all containers
+      env:
+        magento_edition: ${{ inputs.magento_edition }}
+        magento_version: ${{ inputs.magento_version }}
+        magento_repository: ${{ inputs.magento_repository }}
       run: |
-        ddev exec composer create --repository="${{ inputs.magento_repository }}" "${{ inputs.magento_edition }}" ${{ env.M2_VERSION_CODE }} ${{ inputs.magento_version }} --no-install
+        ddev exec composer create --repository="$magento_repository" "$magento_edition" ${{ env.M2_VERSION_CODE }} "$magento_version" --no-install
         cp -r ${{ env.M2_VERSION_CODE }}/. ${{ github.workspace }}
         rm -rf ${{ env.M2_VERSION_CODE }}
 
@@ -147,8 +191,10 @@ runs:
 
     - name: Fixup Composer version audit plugin
       shell: bash
+      env:
+        magento_repository: ${{ inputs.magento_repository }}
       run: |
-          ddev composer config repositories.0 '{"type": "composer", "url":"${{ inputs.magento_repository }}",  "exclude": ["magento/composer-dependency-version-audit-plugin"]}'
+          ddev composer config repositories.0 "{\"type\": \"composer\", \"url\":\"$magento_repository\",  \"exclude\": [\"magento/composer-dependency-version-audit-plugin\"]}"
 
     - name: Fixup Monolog
       # @see https://github.com/magento/magento2/pull/35596

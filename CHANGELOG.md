@@ -10,6 +10,27 @@ The [public API](https://semver.org/spec/v2.0.0.html#spec-item-1) of this projec
 
 ---
 
+## [3.1.0](https://github.com/julienloizelet/magento2-ddev-installation/releases/tag/v3.1.0) - 2024-04-20
+[_Compare with previous release_](https://github.com/julienloizelet/magento2-ddev-installation/compare/v3.0.0...v3.1.0)
+
+### Changed
+
+- Use `mariadb:10.4` as default database for Magento >= `2.4.1`
+- Use `mariadb:10.2` as default database for Magento < `2.4.1`
+
+
+### Add
+
+- Add `database` input to allow choosing database version and type
+
+
+### Fixed
+
+- Remediate command injection vulnerabilities by using intermediate environment variables
+
+---
+
+
 ## [3.0.0](https://github.com/julienloizelet/magento2-ddev-installation/releases/tag/v3.0.0) - 2024-04-11
 [_Compare with previous release_](https://github.com/julienloizelet/magento2-ddev-installation/compare/v2.1.1...v3.0.0)
 

@@ -64,6 +64,20 @@ Allowed values are: `7.2`, `7.3`, `7.4`, `8.1`, `8.2`, `8.3`.
 Please choose a PHP version that is compatible with the `magento_version` below.
 
 ---
+- `database` (_String_)
+
+Database version and type to use.
+
+Default: Empty.
+
+Admissible values are [those allowed by DDEV](https://ddev.readthedocs.io/en/stable/users/extend/database-types/).
+
+If empty, `mariadb:10.2` will be used for Magento version < 2.4.1 and `mariadb:10.4` for Magento version >= 2.4.1.
+
+Please choose a DDEV database version and type that is compatible with the `magento_version` below.
+
+
+---
 - `magento_repository` (_String_)
 
 Where to install Magento from. 
@@ -298,8 +312,8 @@ bin/magento setup:install \
 
 
 The Magento 2 environment is a Docker environment created  with DDEV and comes with the following services:
-- `web`: PHP, nginx-fpm, NodeJs
-- `db`: MariaDb
+- `web`: PHP (version depends on `php_version` input), nginx-fpm, NodeJs
+- `db`: Depends on the `database` input
 - `elastisearch`
 - `memcached`
 - `redis`
