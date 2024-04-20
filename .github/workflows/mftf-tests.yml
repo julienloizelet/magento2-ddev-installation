@@ -23,6 +23,7 @@ jobs:
         m2-version: [ "2.4.7" ]
         php-version: [ "8.3" ]
         magento-repository: ['https://repo.magento.com/']
+        database: ['mysql:5.7', 'mysql:8.0', 'mariadb:10.6']
 
 
     name: MFTF test suite
@@ -42,6 +43,7 @@ jobs:
           magento_version: ${{ matrix.m2-version }}
           magento_repository: ${{ matrix.magento-repository }}
           composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}
+          database: ${{ matrix.database }}
 
       - name: Add Selenium to DDEV
         run: |
