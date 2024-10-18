@@ -10,6 +10,15 @@ The [public API](https://semver.org/spec/v2.0.0.html#spec-item-1) of this projec
 
 ---
 
+## [3.1.1](https://github.com/julienloizelet/magento2-ddev-installation/releases/tag/v3.1.1) - 2024-10-18
+[_Compare with previous release_](https://github.com/julienloizelet/magento2-ddev-installation/compare/v3.1.0...v3.1.1)
+
+### Fixed
+
+- Fix a bug introduced with ddev 1.23.5 during composer config command
+
+---
+
 ## [3.1.0](https://github.com/julienloizelet/magento2-ddev-installation/releases/tag/v3.1.0) - 2024-04-20
 [_Compare with previous release_](https://github.com/julienloizelet/magento2-ddev-installation/compare/v3.0.0...v3.1.0)
 

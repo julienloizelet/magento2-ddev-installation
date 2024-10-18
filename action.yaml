@@ -194,7 +194,7 @@ runs:
       env:
         magento_repository: ${{ inputs.magento_repository }}
       run: |
-          ddev composer config repositories.0 "{\"type\": \"composer\", \"url\":\"$magento_repository\",  \"exclude\": [\"magento/composer-dependency-version-audit-plugin\"]}"
+          ddev exec --raw composer config repositories.0 "{\"type\": \"composer\", \"url\":\"$magento_repository\",  \"exclude\": [\"magento/composer-dependency-version-audit-plugin\"]}"
 
     - name: Fixup Monolog
       # @see https://github.com/magento/magento2/pull/35596
