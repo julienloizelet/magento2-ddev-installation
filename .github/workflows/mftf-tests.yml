@@ -57,8 +57,8 @@ jobs:
         run: |
           cd .ddev && ddev nginx-config okaeli-add-on/magento2/custom_files/mftf/nginx-site.conf
 
-      - name: Disable some extensions for 2.4.7
-        if: startsWith(matrix.m2-version, '2.4.7')
+      - name: Disable some extensions for 2.4.8
+        if: startsWith(matrix.m2-version, '2.4.8')
         run: |
           ddev magento module:disable Magento_AdminAdobeImsTwoFactorAuth
 
