@@ -307,14 +307,18 @@ bin/magento setup:install \
    --currency=USD \
    --timezone=America/Chicago \
    --use-rewrites=1 \
-   --elasticsearch-host=elasticsearch --search-engine=elasticsearch7
+   <SEARCH_ENGINE_STRING>
 ```
+where `SEARCH_ENGINE_STRING` is `--elasticsearch-host=elasticsearch --search-engine=elasticsearsh7` for Magento < 2.4.8 
+and`--opensearch-host=elasticsearch --search-engine=opensearch` for Magento >= 2.4.8.
+
+
 
 
 The Magento 2 environment is a Docker environment created  with DDEV and comes with the following services:
 - `web`: PHP (version depends on `php_version` input), nginx-fpm, NodeJs
 - `db`: Depends on the `database` input
-- `elastisearch`
+- `elastisearch` (or `opensearch` for Magento >= `2.4.8`)
 - `memcached`
 - `redis`
 

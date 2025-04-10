@@ -87,8 +87,8 @@ jobs:
           ddev magento config:set system/full_page_cache/caching_application 2
           ddev magento setup:performance:generate-fixtures ./varnish-profile.xml
 
-      - name: Disable some extensions for 2.4.7
-        if: startsWith(matrix.m2-version, '2.4.7')
+      - name: Disable some extensions for 2.4.8
+        if: startsWith(matrix.m2-version, '2.4.8')
         run: |
           ddev magento maintenance:enable
           ddev magento module:disable --clear-static-content Magento_AdminAdobeImsTwoFactorAuth
