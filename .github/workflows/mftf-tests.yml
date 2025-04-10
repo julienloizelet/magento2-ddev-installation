@@ -73,6 +73,6 @@ jobs:
           ddev magento cache:clean config full_page
           ddev exec vendor/bin/mftf build:project
 
-      - name: Run AdminCreateNewCustomerOnStorefrontTest
-        run: ddev exec vendor/bin/mftf run:test AdminCreateNewCustomerOnStorefrontTest
+      - name: Run AdminLoginSuccessfulTest
+        run: ddev exec vendor/bin/mftf run:test AdminLoginSuccessfulTest
 
