@@ -19,16 +19,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Last 2 patches for the current minor, and last one for the previous minor, greatest php version
+        # Latest 2 patches for the current minor, and latest one for the previous minor, greatest php version
         include:
           - m2-version: '2.3.7-p4'
             php-version: '7.4'
             magento-repository: 'https://repo.magento.com/'
-          - m2-version: '2.4.6'
-            php-version: '8.2'
-            magento-repository: 'https://mirror.mage-os.org/'
           - m2-version: '2.4.7'
             php-version: '8.3'
+            magento-repository: 'https://mirror.mage-os.org/'
+          - m2-version: '2.4.8'
+            php-version: '8.4'
             magento-repository: 'https://repo.magento.com/'
 
 

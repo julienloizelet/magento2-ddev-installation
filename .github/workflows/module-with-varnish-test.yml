@@ -24,14 +24,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Last one for the current and previous minor, greatest php version
-        m2-version: [ "2.3.7-p4", "2.4.7" ]
-        php-version: [ "7.4", "8.3" ]
+        # Latest one for the current and previous minor, greatest php version
+        m2-version: [ "2.3.7-p4", "2.4.8" ]
+        php-version: [ "7.4", "8.4" ]
         magento-repository: [ "https://repo.magento.com/", "https://mirror.mage-os.org/" ]
         exclude:
-          - { php-version: "8.3", m2-version: "2.3.7-p4" }
-          - { php-version: "7.4", m2-version: "2.4.7" }
-          - { php-version: "8.3", m2-version: "2.4.7", "magento-repository" : "https://mirror.mage-os.org/" }
+          - { php-version: "8.4", m2-version: "2.3.7-p4" }
+          - { php-version: "7.4", m2-version: "2.4.8" }
 
     name: Installation and Varnish test suite
     # @see https://devdocs.magento.com/marketplace/sellers/installation-and-varnish-tests.html

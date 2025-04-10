@@ -19,9 +19,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Last version
-        m2-version: [ "2.4.7" ]
-        php-version: [ "8.3" ]
+        # Latest version
+        m2-version: [ "2.4.8" ]
+        php-version: [ "8.4" ]
         magento-repository: ['https://repo.magento.com/']
         database: ['mysql:5.7', 'mysql:8.0', 'mariadb:10.6']
 

@@ -57,9 +57,9 @@ The following keys are available as `step.with` keys:
 
 PHP version to use in the web container.
 
-Default: `8.2`.
+Default: `8.3`.
 
-Allowed values are: `7.2`, `7.3`, `7.4`, `8.1`, `8.2`, `8.3`.
+Allowed values are: `7.2`, `7.3`, `7.4`, `8.1`, `8.2`, `8.3`, `8.4`.
 
 Please choose a PHP version that is compatible with the `magento_version` below.
 
@@ -102,7 +102,7 @@ Could be "magento/project-community-edition", "magento/project-enterprise-editio
 
 The Magento release version to install.  
 
-Default: `2.4.7`.
+Default: `2.4.8`.
 
 You can use `X.Y.Z` format or `X.Y.Z-pN` format for patch release.
 
