@@ -6,7 +6,7 @@
 [![End-to-end tests](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/module-with-end-to-end-tests.yml)
 [![MFTF tests](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/mftf-tests.yml/badge.svg)](https://github.com/julienloizelet/magento2-ddev-installation/actions/workflows/mftf-tests.yml)
 
-A GitHub Action to install Magento 2 with [DDEV](https://github.com/ddev/ddev).
+A GitHub Action for installing Magento 2 with [DDEV](https://github.com/ddev/ddev).
 
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -34,7 +34,7 @@ _We will suppose here that you want to test on a Magento 2.4.5 instance with PHP
 You can add the following step in your workflow:
 
 ```yaml
-- uses: julienloizelet/magento2-ddev-installation@v3
+- uses: julienloizelet/magento2-ddev-installation@v4
   with:
     php_version: "8.1"
     magento_version: "2.4.5"
@@ -57,9 +57,9 @@ The following keys are available as `step.with` keys:
 
 PHP version to use in the web container.
 
-Default: `8.2`.
+Default: `8.3`.
 
-Allowed values are: `7.2`, `7.3`, `7.4`, `8.1`, `8.2`, `8.3`.
+Allowed values are: `7.2`, `7.3`, `7.4`, `8.1`, `8.2`, `8.3`, `8.4`.
 
 Please choose a PHP version that is compatible with the `magento_version` below.
 
@@ -102,7 +102,7 @@ Could be "magento/project-community-edition", "magento/project-enterprise-editio
 
 The Magento release version to install.  
 
-Default: `2.4.7`.
+Default: `2.4.8`.
 
 You can use `X.Y.Z` format or `X.Y.Z-pN` format for patch release.
 
@@ -307,14 +307,16 @@ bin/magento setup:install \
    --currency=USD \
    --timezone=America/Chicago \
    --use-rewrites=1 \
-   --elasticsearch-host=elasticsearch --search-engine=elasticsearch7
+   <SEARCH_ENGINE_STRING>
 ```
+where `SEARCH_ENGINE_STRING` is `--elasticsearch-host=elasticsearch --search-engine=elasticsearsh7` for Magento < 2.4.8 
+and`--opensearch-host=elasticsearch --search-engine=opensearch` for Magento >= 2.4.8.
 
 
 The Magento 2 environment is a Docker environment created  with DDEV and comes with the following services:
 - `web`: PHP (version depends on `php_version` input), nginx-fpm, NodeJs
 - `db`: Depends on the `database` input
-- `elastisearch`
+- `elastisearch` (or `opensearch` for Magento >= `2.4.8`)
 - `memcached`
 - `redis`
 
