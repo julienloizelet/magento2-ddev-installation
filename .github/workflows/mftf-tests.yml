@@ -69,6 +69,7 @@ jobs:
           ddev magento config:set cms/wysiwyg/enabled disabled
           ddev magento config:set admin/security/admin_account_sharing 1
           ddev magento config:set admin/security/use_form_key 0
+          ddev magento config:set web/seo/use_rewrites 1
           ddev magento cache:clean config full_page
           ddev exec vendor/bin/mftf build:project
 
