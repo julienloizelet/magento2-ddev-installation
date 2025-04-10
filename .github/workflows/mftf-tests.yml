@@ -20,8 +20,8 @@ jobs:
       fail-fast: false
       matrix:
         # Latest version
-        m2-version: [ "2.4.8" ]
-        php-version: [ "8.4" ]
+        m2-version: [ "2.4.7" ]
+        php-version: [ "8.3" ]
         magento-repository: ['https://repo.magento.com/']
         database: ['mysql:5.7', 'mysql:8.0', 'mariadb:10.6']
 
@@ -57,14 +57,10 @@ jobs:
         run: |
           cd .ddev && ddev nginx-config okaeli-add-on/magento2/custom_files/mftf/nginx-site.conf
 
-      - name: Disable some extensions for 2.4.8
-        if: startsWith(matrix.m2-version, '2.4.8')
-        run: |
-          ddev magento module:disable Magento_AdminAdobeImsTwoFactorAuth
-
       - name: Disable some extensions for 2.4
         if: startsWith(matrix.m2-version, '2.4')
         run: |
+          ddev magento module:disable Magento_AdminAdobeImsTwoFactorAuth
           ddev magento module:disable Magento_TwoFactorAuth
           ddev magento module:disable Magento_AdminNotification
 

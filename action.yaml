@@ -102,15 +102,15 @@ runs:
 
     - name: Install DDEV tools add-on
       shell: bash
-      run: ddev get julienloizelet/ddev-tools
+      run: ddev add-on get julienloizelet/ddev-tools
 
     - name: Prepare Elasticsearch
       shell: bash
-      run: ddev get ddev/ddev-elasticsearch
+      run: ddev add-on get ddev/ddev-elasticsearch
 
     - name: Prepare OpenSearch
       shell: bash
-      run: ddev get ddev/ddev-opensearch
+      run: ddev add-on get ddev/ddev-opensearch
 
     - name: Set Magento 2 settings
       shell: bash

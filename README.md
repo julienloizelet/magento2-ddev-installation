@@ -34,7 +34,7 @@ _We will suppose here that you want to test on a Magento 2.4.5 instance with PHP
 You can add the following step in your workflow:
 
 ```yaml
-- uses: julienloizelet/magento2-ddev-installation@v3
+- uses: julienloizelet/magento2-ddev-installation@v4
   with:
     php_version: "8.1"
     magento_version: "2.4.5"
@@ -311,8 +311,6 @@ bin/magento setup:install \
 ```
 where `SEARCH_ENGINE_STRING` is `--elasticsearch-host=elasticsearch --search-engine=elasticsearsh7` for Magento < 2.4.8 
 and`--opensearch-host=elasticsearch --search-engine=opensearch` for Magento >= 2.4.8.
-
-
 
 
 The Magento 2 environment is a Docker environment created  with DDEV and comes with the following services:

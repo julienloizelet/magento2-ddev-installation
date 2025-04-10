@@ -57,7 +57,7 @@ jobs:
 
       - name: Add playwright to DDEV
         run: |
-          ddev get https://github.com/julienloizelet/ddev-playwright/archive/refs/tags/v1.0.2.tar.gz
+          ddev add-on get https://github.com/julienloizelet/ddev-playwright/archive/refs/tags/v1.0.2.tar.gz
           ddev restart
 
       - name: Clone M2 ${{ env.EXTENSION_NAME }} files
