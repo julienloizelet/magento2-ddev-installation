@@ -206,7 +206,7 @@ ddev magento c:c
 
 #### MFTF
 
-If you want to use the [Magento Functional Testing Framework](https://devdocs.magento.com/mftf/docs/introduction.html),
+If you want to use the [Magento Functional Testing Framework](https://developer.adobe.com/commerce/testing/functional-testing-framework/),
 here is an example of implementation : [MFTF tests](.github/workflows/mftf-tests.yml)
 
 
