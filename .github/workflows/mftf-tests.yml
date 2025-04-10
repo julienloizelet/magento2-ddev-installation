@@ -74,7 +74,7 @@ jobs:
           ddev exec vendor/bin/mftf build:project
 
       - name: Run AdminLoginSuccessfulTest
-        run: ddev exec vendor/bin/mftf run:test AdminLoginSuccessfulTest
+        run: ddev exec vendor/bin/mftf run:test StorefrontCreateCustomerTest
 
 
       - name: tmate debugging session
