@@ -20,6 +20,7 @@ The [public API](https://semver.org/spec/v2.0.0.html#spec-item-1) of this projec
 
 ### Added
 
+- Add compatibility with Magento `2.4.8`
 - Use `opensearch` search engine for Magento >= `2.4.8`
 
 
@@ -60,6 +61,10 @@ The [public API](https://semver.org/spec/v2.0.0.html#spec-item-1) of this projec
 
 - **Breaking change**: Use `2.4.7` as default Magento version
 - **Breaking change**: Use `8.2` as default PHP version
+
+### Added
+
+- Add compatibility with Magento `2.4.7`
 
 
 ---
