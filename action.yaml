@@ -104,9 +104,13 @@ runs:
       shell: bash
       run: ddev get julienloizelet/ddev-tools
 
-    - name: Prepare Elastic search
+    - name: Prepare Elasticsearch
       shell: bash
       run: ddev get ddev/ddev-elasticsearch
+
+    - name: Prepare OpenSearch
+      shell: bash
+      run: ddev get ddev/ddev-opensearch
 
     - name: Set Magento 2 settings
       shell: bash
@@ -122,15 +126,22 @@ runs:
         mkdir -p .ddev/homeadditions/.composer
         echo "$composer_auth" > .ddev/homeadditions/.composer/auth.json
 
-    - name: Set ELASTIC_INSTALL_STRING env for 2.4
+    - name: Set SEARCH_ENGINE_STRING env
       shell: bash
       if: startsWith(inputs.magento_version, '2.4')
-      run: echo "ELASTIC_INSTALL_STRING=--elasticsearch-host=elasticsearch --search-engine=elasticsearch7" >> $GITHUB_ENV
+      run: |
+        magento_version="${{ inputs.magento_version }}"
+        # Check if the version is 2.4.8 or higher
+        if [[ "$(printf '%s\n' "$magento_version" "2.4.8" | sort -V | head -n1)" == "2.4.8" ]]; then
+          echo "SEARCH_ENGINE_STRING=--opensearch-host=opensearch --search-engine=opensearch" >> $GITHUB_ENV
+        else
+          echo "SEARCH_ENGINE_STRING=--elasticsearch-host=elasticsearch --search-engine=elasticsearch7" >> $GITHUB_ENV
+        fi
 
-    - name: Set ELASTIC_INSTALL_STRING env for 2.3
+    - name: Set SEARCH_ENGINE_STRING env for 2.3
       shell: bash
       if: startsWith(inputs.magento_version, '2.3')
-      run: echo "ELASTIC_INSTALL_STRING=" >> $GITHUB_ENV
+      run: echo "SEARCH_ENGINE_STRING=" >> $GITHUB_ENV
 
     - name: Handle PHP version
       shell: bash
@@ -230,7 +241,7 @@ runs:
                          --currency=USD \
                          --timezone=America/Chicago \
                          --use-rewrites=1 \
-                         ${{ env.ELASTIC_INSTALL_STRING }}
+                         ${{ env.SEARCH_ENGINE_STRING }}
 
 outputs:
   m2_url:
