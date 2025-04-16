@@ -45,12 +45,19 @@ jobs:
           composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}
           database: ${{ matrix.database }}
 
+      - name: Set unsecure url
+        # Workaround as something goes wrong with Selenium Chrome and SSL certificates
+        run: |
+          SECURE_URL="${{ steps.magento2-install.outputs.m2_url }}"
+          UNSECURE_URL="${SECURE_URL/https:/http:}"
+          echo "UNSECURE_URL=$UNSECURE_URL" >> $GITHUB_ENV
+
       - name: Add Selenium to DDEV
         run: |
           ddev get julienloizelet/ddev-magento2-mftf
           cp .ddev/okaeli-add-on/magento2/custom_files/mftf/.credentials dev/tests/acceptance/.credentials
           cp .ddev/okaeli-add-on/magento2/custom_files/mftf/.env.dist dev/tests/acceptance/.env
-          sed -i -e 's,REPLACE_BASE_URL,${{ steps.magento2-install.outputs.m2_url }},' dev/tests/acceptance/.env
+          sed -i -e 's,REPLACE_BASE_URL,${{ env.UNSECURE_URL }},' dev/tests/acceptance/.env
           ddev restart
 
       - name: Configure Nginx for MFTF
@@ -70,18 +77,11 @@ jobs:
           ddev magento config:set admin/security/admin_account_sharing 1
           ddev magento config:set admin/security/use_form_key 0
           ddev magento config:set web/seo/use_rewrites 1
+          ddev magento  config:set web/unsecure/base_url ${{env.UNSECURE_URL}}/   
           ddev magento cache:clean config full_page
           ddev exec vendor/bin/mftf build:project
 
-      - name: Run AdminLoginSuccessfulTest
-        run: ddev exec vendor/bin/mftf run:test StorefrontCreateCustomerTest
+      - name: Run a test
+        run: ddev exec vendor/bin/mftf run:test AdminLoginSuccessfulTest
 
-
-      - name: tmate debugging session
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: true
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-        timeout-minutes: 30
-        if: failure()
 
