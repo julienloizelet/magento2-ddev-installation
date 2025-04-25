@@ -106,3 +106,9 @@ jobs:
         run: |
           ddev phpunit vendor/${{ env.EXTENSION_PACKAGE_NAME }}/Test/Unit
           
+  workflow-keepalive:
+    name: Keepalive workflow
+    if: github.event_name == 'schedule'
+    uses: "./.github/workflows/keepalive.yml"
+    permissions:
+      actions: write
