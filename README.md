@@ -70,7 +70,7 @@ Database version and type to use.
 
 Default: Empty.
 
-Admissible values are [those allowed by DDEV](https://ddev.readthedocs.io/en/stable/users/extend/database-types/).
+Admissible values are [those allowed by DDEV](https://docs.ddev.com/en/stable/users/extend/database-types/).
 
 If empty, `mariadb:10.2` will be used for Magento version < 2.4.1 and `mariadb:10.4` for Magento version >= 2.4.1.
 
