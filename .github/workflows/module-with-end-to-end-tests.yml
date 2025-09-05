@@ -40,7 +40,7 @@ jobs:
       EXTENSION_NAME: "Okaeli_CategoryCode"
       EXTENSION_PATH: "category-code"
       EXTENSION_GITHUB_URL: "julienloizelet/magento2-category-code"
-      EXTENSION_REF: "v1.1.12"
+      EXTENSION_REF: "v1.1.14"
 
     steps:
 
@@ -49,6 +49,7 @@ jobs:
 
       - name: Install Magento 2 with DDEV
         uses: ./
+        id: magento_install
         with:
           php_version: ${{ matrix.php-version }}
           magento_version: ${{ matrix.m2-version }}
@@ -57,8 +58,7 @@ jobs:
 
       - name: Add playwright to DDEV
         run: |
-          ddev add-on get https://github.com/julienloizelet/ddev-playwright/archive/refs/tags/v1.0.2.tar.gz
-          ddev restart
+          ddev add-on get julienloizelet/ddev-playwright
 
       - name: Clone M2 ${{ env.EXTENSION_NAME }} files
         uses: actions/checkout@v4
@@ -66,6 +66,9 @@ jobs:
           path: my-own-modules/${{ env.EXTENSION_PATH }}
           repository: ${{ env.EXTENSION_GITHUB_URL }}
           ref: ${{ env.EXTENSION_REF }}
+
+      - name: DDEV start
+        run: ddev start
 
       - name: Validate composer.json
         run: ddev composer validate --working-dir ./my-own-modules/${{ env.EXTENSION_PATH }}
@@ -107,21 +110,24 @@ jobs:
 
       - name: Prepare for playwright test
         run: |
-          cp .ddev/okaeli-add-on/magento2/custom_files/varnish-profile.xml varnish-profile.xml
-          ddev magento setup:performance:generate-fixtures ./varnish-profile.xml
-          cd ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}
+          # Copy the test layout
+          cd my-own-modules/${{ env.EXTENSION_PATH }}
           mkdir -p view/frontend/layout
           cp Test/EndToEnd/layout-update-test-file/catalog_category_code_test_code_1.xml.dist view/frontend/layout/catalog_category_code_test_code_1.xml
+          cd ${{ github.workspace }}
+          # Override the Playwright test folder
+          echo -e "services:\n  playwright:\n    environment:\n      - PLAYWRIGHT_TEST_DIR=my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd" > .ddev/docker-compose.override.yaml
+          ddev restart
+          # Add some fixture data
+          ddev magento setup:performance:generate-fixtures setup/performance-toolkit/profiles/ce/small.xml
+          # Set base url in Playwright config
+          sed -i 's|CHANGE_BASE_URL|${{ steps.magento_install.outputs.m2_url }}|g' my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd/.env.example
+          # Install Playwright
+          ddev playwright-install
           ddev magento cache:flush
-          cd ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd/__scripts__
-          chmod +x test-init.sh
-          ./test-init.sh
-          chmod +x run-tests.sh
 
-      - name: Config test
-        uses: ./.github/workflows/end-to-end/run-single-test
-        with:
-          test_path: ${{ github.workspace }}/my-own-modules/${{ env.EXTENSION_PATH }}/Test/EndToEnd
-          file_path: 1-config.js
+      - name: Run category page test
+        run: ddev playwright test category.test
+
 
 
