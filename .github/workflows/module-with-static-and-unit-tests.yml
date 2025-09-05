@@ -21,15 +21,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # First and latest patch for the current and previous minor, greatest php version
+        # First and latest patch (only with composer 2) for the current and previous minor, greatest php version
         include:
-          - m2-version: '2.3.0'
-            php-version: '7.2'
-            magento-repository: 'https://repo.magento.com/'
           - m2-version: '2.3.7'
             php-version: '7.4'
             magento-repository: 'https://repo.magento.com/'
-          - m2-version: '2.4.0'
+          - m2-version: '2.4.2'
             php-version: '7.4'
             magento-repository: 'https://repo.magento.com/'
           - m2-version: '2.4.8'
