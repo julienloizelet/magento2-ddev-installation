@@ -68,14 +68,14 @@ jobs:
           ddev exec --raw composer config repositories.1 '{"type": "composer", "url":"${{ matrix.magento-repository }}",  "exclude": ["${{ env.EXTENSION_PACKAGE_NAME }}"]}'
 
       - name: Add ${{ env.EXTENSION_NAME }} as composer dependency
-        run: ddev composer require ${{ env.EXTENSION_PACKAGE_NAME }}:@dev --no-interaction
+        run: ddev composer require ${{ env.EXTENSION_PACKAGE_NAME }}:@dev --no-interaction --no-audit
 
       - name: Add Coding Standard and PHPStan for Magento 2.3
         if: contains(fromJson('["2.3.0"]'),matrix.m2-version)
         run: |
-          ddev composer require squizlabs/php_codesniffer:^3.4 magento/magento-coding-standard
+          ddev composer require squizlabs/php_codesniffer:^3.4 magento/magento-coding-standard --no-audit
           ddev exec vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/
-          ddev composer require --dev phpstan/phpstan:0.12.23 bitexpert/phpstan-magento:v0.10.0
+          ddev composer require --dev phpstan/phpstan:0.12.23 bitexpert/phpstan-magento:v0.10.0 --no-audit
           mkdir dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan
           cp .ddev/okaeli-add-on/magento2/custom_files/phpstan.neon dev/tests/static/testsuite/Magento/Test/Php/_files/phpstan/phpstan.neon
 

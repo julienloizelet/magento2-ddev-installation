@@ -81,7 +81,7 @@ jobs:
 
       - name: Add ${{ env.EXTENSION_NAME }} as composer dependency
         run: |
-          ddev composer require ${{ env.EXTENSION_PACKAGE_NAME }}:@dev --no-interaction
+          ddev composer require ${{ env.EXTENSION_PACKAGE_NAME }}:@dev --no-interaction --no-audit
 
       - name: Disable some extensions for >= 2.4.7
         if: contains(fromJson('["2.4.7","2.4.8"]'),matrix.m2-version)

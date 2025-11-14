@@ -72,7 +72,7 @@ jobs:
           ddev exec --raw composer config repositories.1 '{"type": "composer", "url":"${{ matrix.magento-repository }}",  "exclude": ["${{ env.EXTENSION_PACKAGE_NAME }}"]}'
 
       - name: Add ${{ env.EXTENSION_NAME }} as composer dependency
-        run: ddev composer require ${{ env.EXTENSION_PACKAGE_NAME }}:@dev --no-interaction
+        run: ddev composer require ${{ env.EXTENSION_PACKAGE_NAME }}:@dev --no-interaction --no-audit
 
       - name: Installation tests
         run: |
