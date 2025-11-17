@@ -107,7 +107,7 @@ Default: `2.4.8`.
 You can use `X.Y.Z` format or `X.Y.Z-pN` format for patch release.
 
 Allowed versions are `2.3.0`, `2.3.1`, `2.3.2`, `2.3.3`, `2.3.4`, `2.3.5`, `2.3.6`, `2.3.7`, `2.4.0`,
-  `2.4.1`, `2.4.2`, `2.4.3`,`2.4.4`, `2.4.5`, `2.4.6`, `2.4.7` and any of their patches versions. 
+  `2.4.1`, `2.4.2`, `2.4.3`,`2.4.4`, `2.4.5`, `2.4.6`, `2.4.7`, `2.4.8` and any of their patches versions. 
 
 Please note that available versions depend on the chosen `magento_repository`.
 
@@ -132,6 +132,21 @@ You have to pass a JSON string. For example:
 ```
 As GitHub allows saving multiline secret, you can use a secret to store this sensitive value. Just copy/paste the 
 json in a `M2_COMPOSER_AUTH` secret and use it like this: `composer_auth: ${{ secrets.M2_COMPOSER_AUTH }}`.
+
+---
+
+- `composer_version` (_String_)
+
+Composer version for the web container and the `ddev composer` command.
+
+If empty, the default DDEV composer version will be used.
+
+Default: ``.
+
+You can use any valid composer version available for DDEV configuration. Please refer to [DDEV documentation](https://docs.ddev.com/en/stable/users/configuration/config/#composer_version).
+
+If you are testing one of the following Magento versions : `2.3.0`,`2.3.1`,`2.3.2`,`2.3.3`,`2.3.4`,`2.3.5`,`2.3.6`,`2.4.0`,`2.4.1`, you must use Composer `1.x` and you can set `1` to do so.
+
 
 ---
 
