@@ -10,6 +10,16 @@ The [public API](https://semver.org/spec/v2.0.0.html#spec-item-1) of this projec
 
 ---
 
+## [4.1.0](https://github.com/julienloizelet/magento2-ddev-installation/releases/tag/v4.1.0) - 2025-11-18
+[_Compare with previous release_](https://github.com/julienloizelet/magento2-ddev-installation/compare/v4.0.0...v4.1.0)
+
+
+### Added
+
+- Add `composer_version` input.
+
+---
+
 ## [4.0.0](https://github.com/julienloizelet/magento2-ddev-installation/releases/tag/v4.0.0) - 2025-04-10
 [_Compare with previous release_](https://github.com/julienloizelet/magento2-ddev-installation/compare/v3.1.1...v4.0.0)
 
@@ -23,6 +33,7 @@ The [public API](https://semver.org/spec/v2.0.0.html#spec-item-1) of this projec
 - Add compatibility with Magento `2.4.8`
 - Use `opensearch` search engine for Magento >= `2.4.8`
 
+---
 
 ## [3.1.1](https://github.com/julienloizelet/magento2-ddev-installation/releases/tag/v3.1.1) - 2024-10-18
 [_Compare with previous release_](https://github.com/julienloizelet/magento2-ddev-installation/compare/v3.1.0...v3.1.1)

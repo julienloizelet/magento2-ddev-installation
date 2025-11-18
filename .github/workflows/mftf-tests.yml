@@ -33,7 +33,7 @@ jobs:
     steps:
 
       - name: Clone current repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Magento 2 with DDEV
         id: magento2-install

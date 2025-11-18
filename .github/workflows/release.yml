@@ -41,7 +41,7 @@ jobs:
       
 
       - name: Clone sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Check version ${{ env.VERSION_NUMBER }} consistency in CHANGELOG and README
         run: |
@@ -116,7 +116,7 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 

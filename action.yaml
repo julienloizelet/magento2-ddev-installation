@@ -40,6 +40,12 @@ inputs:
     description: "Composer authentication credentials"
     default: ""
 
+  composer_version:
+    type: string
+    required: false
+    description: "Composer version to use"
+    default: ""
+
   varnish_setup:
     type: boolean
     required: false
@@ -153,9 +159,11 @@ runs:
 
     - name: Handle composer version
       shell: bash
-      if: contains(fromJson('["2.3.0","2.3.1","2.3.2","2.3.3","2.3.4","2.3.5","2.3.6","2.4.0","2.4.1"]'),matrix.m2-version)
+      if: ${{inputs.composer_version}}
+      env:
+        composer_version: ${{ inputs.composer_version }}
       run: |
-        sed -i -e 's/^composer_version:.*/composer_version: "1"/g' .ddev/config.yaml    
+        sed -i -e "s/^composer_version:.*/composer_version: \"$composer_version\"/g" .ddev/config.yaml
 
     - name: Prepare Varnish
       shell: bash
@@ -174,7 +182,7 @@ runs:
       if: inputs.varnish_setup == 'true'
       run: |
         ddev replace-acl $(ddev find-ip ddev-router)
-        ddev reload-vcl  
+        ddev reload-vcl
 
     - name: Set COMPOSER_VERSION env
       shell: bash
@@ -196,9 +204,9 @@ runs:
       shell: bash
       if: ${{ startsWith(env.COMPOSER_VERSION, '2') }}
       run: |
-        ddev composer config --no-interaction allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
-        ddev composer config --no-interaction allow-plugins.laminas/laminas-dependency-plugin true
-        ddev composer config --no-interaction allow-plugins.magento/* true
+        ddev exec composer config --no-interaction allow-plugins.dealerdirect/phpcodesniffer-composer-installer true
+        ddev exec composer config --no-interaction allow-plugins.laminas/laminas-dependency-plugin true
+        ddev exec composer config --no-interaction allow-plugins.magento/* true
 
     - name: Fixup Composer version audit plugin
       shell: bash
@@ -211,11 +219,11 @@ runs:
       # @see https://github.com/magento/magento2/pull/35596
       shell: bash
       if: contains(fromJson('["2.4.4"]'),inputs.magento_version)
-      run: ddev composer require monolog/monolog:"<2.7.0" --no-update
+      run: ddev exec composer require monolog/monolog:"<2.7.0" --no-update
 
     - name: Install composer 1 plugin for parallel downloads
       shell: bash
-      run: ddev composer global require hirak/prestissimo
+      run: ddev exec composer global require hirak/prestissimo
       if: ${{ startsWith(env.COMPOSER_VERSION, '1') }}
 
     - name: Install Magento
